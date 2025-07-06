@@ -35,7 +35,7 @@ body {
 }
 
 .h::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -43,7 +43,8 @@ body {
   height: 100%;
   background: red;
   z-index: -1;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+  transition:
+    all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     padding-left 0.12s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -74,23 +75,23 @@ a {
   color: #5865f2;
 }
 
-a[data-link="github"] {
+.github {
   color: var(--color-github);
 }
-a[data-link="gitlab"] {
+.gitlab {
   color: var(--color-gitlab);
 }
-a[data-link="email"] {
+.email {
   color: var(--color-email);
 }
-a[data-link="discord"] {
+.discord {
   color: var(--color-discord);
 }
 
 a::before {
   position: absolute;
   translate: -200%;
-  content: ">";
+  content: '>';
   color: transparent;
   transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -101,7 +102,7 @@ a:hover::before {
 }
 
 a::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
@@ -112,16 +113,16 @@ a::after {
   left: -2px;
 }
 
-a[data-link="github"]::after {
+.github::after {
   background: var(--color-github);
 }
-a[data-link="gitlab"]::after {
+.gitlab::after {
   background: var(--color-gitlab);
 }
-a[data-link="email"]::after {
+.email::after {
   background: var(--color-email);
 }
-a[data-link="discord"]::after {
+.discord::after {
   background: var(--color-discord);
 }
 
