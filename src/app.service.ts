@@ -12,7 +12,7 @@ export class AppService {
         ${this.createPageService.createHead('Velox0')}
         <body>
           <div id="app">
-            <div class="h">I am Velox0</div>
+            <h1 class="h">I am Velox0</h1>
             <div>My name is Veloxzerror.</div>
             <div>
               I am a backend developer (and a bit of

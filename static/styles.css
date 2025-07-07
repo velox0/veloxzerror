@@ -134,3 +134,11 @@ a::after {
 a:hover::after {
   width: calc(100% + 4px);
 }
+
+.nostyle::after {
+  background: transparent;
+}
+
+.nostyle:hover::before {
+  color: transparent;
+}

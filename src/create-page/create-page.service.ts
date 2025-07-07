@@ -38,4 +38,24 @@ export class CreatePageService {
         </body>
       </html> `;
   }
+
+  createErrorPage(
+    title: string,
+    error: string,
+    backlink?: { text: string; href: string },
+  ): string {
+    return `<!DOCTYPE html>
+      <html lang="en">
+        ${this.createHead(title, ['/static/styles.css'])}
+        <body>
+          <div id="app">
+            <p><a href="${backlink ? backlink.href : '/'}" class="nostyle">← ${
+              backlink ? backlink.text : 'Home'
+            }</a></p>
+            <h1 class="h">${title}</h1>
+            <p>${error}</p>
+          </div>
+        </body>
+      </html> `;
+  }
 }

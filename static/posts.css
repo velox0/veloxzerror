@@ -4,7 +4,8 @@
 }
 
 #post-container {
-  width: 100%;
+  margin-left: 2rem;
+  width: calc(100% - 2rem);
   display: flex;
   flex-direction: row;
   gap: 2rem;
@@ -17,7 +18,7 @@
   height: 400px;
   position: relative;
   width: 10%;
-  transition: 0.35s ease;
+  transition: 0.3s ease;
   filter: brightness(1.2);
 }
 
@@ -27,9 +28,7 @@
 }
 
 .post h2 {
-  overflow: hidden;
   position: absolute;
-  height: 0;
   transform: rotate(90deg);
   transform-origin: bottom left;
 }
@@ -49,7 +48,6 @@
   position: absolute;
   transform: translateY(200%);
   bottom: 0;
-  margin-left: 2rem;
 }
 
 .post h2,
