@@ -10,6 +10,10 @@
   flex-direction: row;
   gap: 2rem;
   transition: all 0.3s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .post {
@@ -64,4 +68,36 @@
 
 .open-post p {
   color: black;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #post-container {
+    flex-direction: column;
+    gap: 3rem;
+    z-index: 0;
+  }
+  .post {
+    width: 100%;
+    filter: none;
+    transition: none;
+    z-index: 1;
+  }
+  .open-post {
+    width: 100%;
+  }
+  .post h2 {
+    color: black;
+    transform: rotate(90deg) translateY(100%);
+  }
+  .post p {
+    color: black;
+  }
+  .mobile-only {
+    display: block;
+    background-color: #ccc;
+  }
 }

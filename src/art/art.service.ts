@@ -62,9 +62,12 @@ export class ArtService {
     return this.art.map((art) => {
       return {
         ...art,
-        image: `<div class="post" data-key="${art.key}">
-          <h2>${art.title}</h2>
-          <img src="${art.image}" alt="${art.title}" />
+        image: `
+        <div class="post" data-key="${art.key}">
+          <a href="/art/${art.key}" class="nostyle">
+            <h2>${art.title}</h2>
+            <img src="${art.image}" alt="${art.title}" />
+          </a>
           <div class="post-content">
             <p>${art.description}</p>
           </div>
@@ -79,14 +82,13 @@ export class ArtService {
       `<p><a href="/" class="nostyle">← Home</a></p>
       <h1 class='h'>Art</h1>
       <p>Some stuff I made mostly in blender.</p>
+      <p class="mobile-only">This page is meant to be viewed on desktop.
+      </p>
       <div id="post-container">
-        ${this.getArt()
-          .map((art) => art.image)
-          .join('')}
-      </div>
-      <br />
-      <br />
-      <p>This page is meant to be viewed on desktop.</p>`,
+      ${this.getArt()
+        .map((art) => art.image)
+        .join('')}
+      </div>`,
       ['/static/styles.css', '/static/posts.css'],
       ['/static/posts.js'],
     );

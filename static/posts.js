@@ -3,6 +3,7 @@ const posts = document.querySelectorAll('.post');
 const postContainer = document.getElementById('post-container');
 
 document.getElementById('post-container').addEventListener('mousemove', (e) => {
+  if (window.innerWidth < 768) return;
   const postContainerWidth = postContainer.offsetWidth;
   const mouseX = e.offsetX;
   const postIndex = Math.min(
@@ -19,6 +20,7 @@ document.getElementById('post-container').addEventListener('mousemove', (e) => {
 });
 
 document.getElementById('post-container').addEventListener('click', (e) => {
+  if (window.innerWidth < 768) return;
   console.log(e.target);
   const postContainerWidth = postContainer.offsetWidth;
   const mouseX = e.offsetX;
