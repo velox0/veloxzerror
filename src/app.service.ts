@@ -77,17 +77,17 @@ export class AppService {
             ];
             let i = 1;
             const tech = document.getElementById('tech');
-            async function writeTech(ctx, i) {
+            async function writeTech(ctx) {
               ctx.innerText = '';
               for (let j = 0; j < techStack[i].length; j++) {
-                ctx.innerHTML += techStack[i][j];
+                ctx.innerText = techStack[i].slice(0, j + 1);
                 await new Promise((resolve) =>
                   setTimeout(resolve, 500 / techStack[i].length),
                 );
               }
             }
             setInterval(() => {
-              writeTech(tech, i);
+              writeTech(tech);
               i = (i + 1) % techStack.length;
             }, 3000);
           </script>
