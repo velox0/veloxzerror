@@ -4,6 +4,7 @@
   --color-gitlab: #fc6d26;
   --color-email: #ea4335;
   --color-discord: #5865f2;
+  --color-link: #5865f2;
 }
 
 html {
@@ -72,7 +73,7 @@ body {
 a {
   position: relative;
   text-decoration: none;
-  color: #5865f2;
+  color: var(--color-link);
 }
 
 .github {
@@ -111,6 +112,10 @@ a::after {
   z-index: -1;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   left: -2px;
+}
+
+a::after {
+  background: var(--color-link);
 }
 
 .github::after {

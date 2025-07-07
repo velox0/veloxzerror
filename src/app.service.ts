@@ -1,29 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { html } from '@velox0/flinch';
+import { CreatePageService } from './create-page/create-page.service';
 
 @Injectable()
 export class AppService {
-  createHead(title: string): string {
-    return html`
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>${title}</title>
-        <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
-        <link rel="stylesheet" href="static/styles.css" />
-      </head>
-    `.toString();
-  }
+  constructor(private readonly createPageService: CreatePageService) {}
 
   getHello(): string {
     return html`<!DOCTYPE html>
       <html lang="en">
-        ${this.createHead('Velox0')}
+        ${this.createPageService.createHead('Velox0')}
         <body>
           <div id="app">
             <div class="h">I am Velox0</div>
             <div>My name is Veloxzerror.</div>
-            <div>I am a backend developer.</div>
+            <div>
+              I am a backend developer (and a bit of
+              <a href="/art">artist</a>?).
+            </div>
             <div>I write my own libraries when bored.</div>
             <div>I write in C, C++, JS, TS, Python, Go, and more.</div>
             <div>
