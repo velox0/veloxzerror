@@ -13,10 +13,17 @@ document.getElementById('post-container').addEventListener('mousemove', (e) => {
   posts.forEach((post, index) => {
     if (index === postIndex) {
       post.classList.add('open-post');
+      // set pseudo element background color
+      document.body.style.setProperty('--bg-color', post.dataset.color);
+      console.log(post.dataset.color);
     } else {
       post.classList.remove('open-post');
     }
   });
+});
+
+document.getElementById('post-container').addEventListener('mouseleave', () => {
+  document.body.style.setProperty('--bg-color', '#fff');
 });
 
 document.getElementById('post-container').addEventListener('click', (e) => {

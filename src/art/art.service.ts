@@ -8,6 +8,7 @@ export class ArtService {
     title: string;
     description: string;
     image: string;
+    color: string;
     video?: string;
   }[] = [];
 
@@ -18,6 +19,7 @@ export class ArtService {
         title: 'Apple',
         description: 'My first 3d work. A for apple.',
         image: 'static/art/apple/apple.jpg',
+        color: '#ffcccc',
         video: '/static/art/apple/apple.mp4',
       },
       {
@@ -25,6 +27,7 @@ export class ArtService {
         title: 'Eye',
         description: '3d eye with geometry nodes',
         image: '/static/art/eye/eye.png',
+        color: '#ccffff',
         video: '/static/art/eye/eye.mp4',
       },
       {
@@ -32,6 +35,7 @@ export class ArtService {
         title: 'Daft Punk',
         description: 'Daft Punk - Thomas Bangalter helmet',
         image: '/static/art/daft-punk/daft-punk.png',
+        color: '#ffdddd',
         video: '/static/art/daft-punk/daft-punk.mp4',
       },
       {
@@ -39,6 +43,7 @@ export class ArtService {
         title: 'Life of Pablo',
         description: 'Life of Pablo - Kanye West album',
         image: '/static/art/lop/lop.png',
+        color: '#ffaa99',
         video: '/static/art/lop/lop.mp4',
       },
       {
@@ -46,6 +51,7 @@ export class ArtService {
         title: 'hAste',
         description: 'hAste. How a lot of things are done in a hurry.',
         image: '/static/art/haste/haste.png',
+        color: '#ff7777',
         video: '/static/art/haste/haste.mp4',
       },
       {
@@ -53,6 +59,7 @@ export class ArtService {
         title: 'f1',
         description: 'Formula 1 - car',
         image: '/static/art/f1/f1.png',
+        color: '#ff7799',
         video: '/static/art/f1/f1.mp4',
       },
     ];
@@ -63,7 +70,7 @@ export class ArtService {
       return {
         ...art,
         image: `
-        <div class="post" data-key="${art.key}">
+        <div class="post" data-key="${art.key}" data-color="${art.color}">
           <a href="/art/${art.key}" class="nostyle">
             <h2>${art.title}</h2>
             <img src="${art.image}" alt="${art.title}" />
