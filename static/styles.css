@@ -8,15 +8,15 @@
 }
 
 html {
-  font-family: monospace;
-  /* font-family: monospace, "Fira Mono", "JetBrains Mono", "Menlo", "Consolas",
-    "Liberation Mono", "Courier New", Courier; */
+  /* font-family: monospace; */
+  font-family:
+    'Fira Mono', 'JetBrains Mono', 'Menlo', 'Consolas', 'Liberation Mono',
+    'Courier New', Courier;
 }
 
 body {
   margin: 0;
   padding: 20px;
-  /* background-color: #f0f0f0; */
   color: #333;
 }
 #app {
