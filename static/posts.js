@@ -27,12 +27,12 @@ document.getElementById('post-container').addEventListener('mouseleave', () => {
 
 document.getElementById('post-container').addEventListener('click', (e) => {
   if (window.innerWidth < 768) return;
+  if (!done) return;
   const postContainerWidth = postContainer.offsetWidth;
-  const mouseX = e.offsetX;
+  const mouseX = e.clientX - postContainer.offsetLeft;
   const postIndex = Math.min(
-    Math.max(0, Math.round((mouseX / postContainerWidth) * posts.length)),
+    Math.max(0, Math.floor((mouseX / postContainerWidth) * posts.length)),
     posts.length - 1,
   );
-  // go to post index page
   window.location.href = `/art/${posts[postIndex].dataset.key}`;
 });
