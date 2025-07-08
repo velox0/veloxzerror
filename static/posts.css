@@ -1,6 +1,8 @@
 :root {
   --color-bg: #fff;
   --color-text: #333;
+  --inactive-brightness: 1.5;
+  --inactive-fade: 0.3;
 }
 
 #app {
@@ -32,6 +34,8 @@ body::before {
   :root {
     --color-bg: #181818;
     --color-text: #f3f3f3;
+    --inactive-brightness: 0.5;
+    --inactive-fade: 1;
   }
   body::before {
     background-image: none;
@@ -59,13 +63,14 @@ body::before {
   height: 400px;
   position: relative;
   width: 10%;
-  transition: 0.3s ease;
-  filter: brightness(1.2);
+  transition: 0.5s ease;
+  filter: contrast(var(--inactive-fade)) brightness(var(--inactive-brightness));
 }
 
 .open-post {
   width: 50%;
-  filter: invert(0) brightness(1);
+  filter: contrast(1) brightness(1);
+  transition: 0.25s ease;
 }
 
 .post h2 {
