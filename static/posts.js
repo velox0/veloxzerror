@@ -1,11 +1,10 @@
-document.getElementsByClassName('post')[0].classList.add('open-post');
 const posts = document.querySelectorAll('.post');
 const postContainer = document.getElementById('post-container');
 
 document.getElementById('post-container').addEventListener('mousemove', (e) => {
   if (window.innerWidth < 768) return;
   const postContainerWidth = postContainer.offsetWidth;
-  const mouseX = e.offsetX;
+  const mouseX = e.clientX - postContainer.offsetLeft;
   const postIndex = Math.min(
     Math.max(0, Math.round((mouseX / postContainerWidth) * posts.length)),
     posts.length - 1,
@@ -23,7 +22,7 @@ document.getElementById('post-container').addEventListener('mousemove', (e) => {
 });
 
 document.getElementById('post-container').addEventListener('mouseleave', () => {
-  document.body.style.setProperty('--bg-color', '#fff');
+  document.body.style.setProperty('--bg-color', 'var(--color-bg)');
 });
 
 document.getElementById('post-container').addEventListener('click', (e) => {

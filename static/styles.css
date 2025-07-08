@@ -5,6 +5,20 @@
   --color-email: #ea4335;
   --color-discord: #5865f2;
   --color-link: #5865f2;
+  --color-bg: #fff;
+  --color-text: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #181818;
+    --color-text: #f3f3f3;
+    --color-link: #8ab4f8;
+    --color-github: #f3f3f3;
+    --color-gitlab: #ffb86c;
+    --color-email: #ff7b72;
+    --color-discord: #8ab4f8;
+  }
 }
 
 html {
@@ -17,7 +31,8 @@ html {
 body {
   margin: 0;
   padding: 20px;
-  color: #333;
+  color: var(--color-text);
+  background-color: var(--color-bg);
 }
 #app {
   display: flex;
@@ -28,7 +43,7 @@ body {
 .h {
   margin-bottom: 10px;
   padding: 0;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--color-text);
   background-color: transparent;
   position: relative;
   overflow: hidden;
@@ -54,9 +69,8 @@ body {
 }
 
 .h:hover {
-  color: white;
+  color: var(--color-bg);
   padding-left: 20px;
-  color: white;
   border-bottom: 1px solid red;
 }
 

@@ -49,7 +49,7 @@ export class ArtService {
       {
         key: 'hAste',
         title: 'hAste',
-        description: 'hAste. How a lot of things are done in a hurry.',
+        description: 'hAste. An autological work piece!',
         image: '/static/art/haste/haste.png',
         color: '#ff7777',
         video: '/static/art/haste/haste.mp4',
@@ -95,7 +95,8 @@ export class ArtService {
       ${this.getArt()
         .map((art) => art.image)
         .join('')}
-      </div>`,
+      </div>
+      <script> document.getElementsByClassName('post')[0].classList.add('open-post'); </script>`,
       ['/static/styles.css', '/static/posts.css'],
       ['/static/posts.js'],
     );
