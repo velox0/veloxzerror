@@ -106,6 +106,10 @@ export class ArtService {
         .map((art) => art.image)
         .join('')}
       </div>
+      <br />
+      <br />
+      <br />
+      <p>If the images stretch, your network is sucks ahh. <small>I'm working on it.</small></p>
       <script>
       let done = false;
       let post = document.getElementsByClassName('post');
@@ -115,7 +119,7 @@ export class ArtService {
           setTimeout(() => {
             post[index].classList.remove('open-post');
             togglePost(index - 1);
-          }, 300);
+          }, 150);
         } else done = true;
       }
       togglePost(post.length - 1); // start from the last post
