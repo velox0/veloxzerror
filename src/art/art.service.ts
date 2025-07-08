@@ -32,6 +32,14 @@ export class ArtService {
         video: '/static/art/lop/lop.mp4',
       },
       {
+        key: 'fireworks',
+        title: 'Lights',
+        description: 'Diwali - shoutout to my favorite festival!',
+        image: '/static/art/lights/lights.png',
+        color: '#ff7799',
+        video: '/static/art/lights/lights.mp4',
+      },
+      {
         key: 'f1',
         title: 'f1',
         description: 'Formula 1 - car',
