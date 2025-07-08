@@ -23,4 +23,4 @@ jobs:
             git fetch origin
             git reset --hard origin/main
             npm install
-            sudo npm start
+            pm2 restart veloxzerror || pm2 start npm --name veloxzerror -- start
