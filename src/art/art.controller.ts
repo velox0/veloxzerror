@@ -11,7 +11,7 @@ export class ArtController {
 
   @Get()
   getArtPage() {
-    return this.artService.artPage();
+    return this.artService.getArtPage();
   }
 
   @Get('/*')

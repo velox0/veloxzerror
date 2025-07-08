@@ -43,6 +43,7 @@ body::before {
   margin-left: 2rem;
   width: calc(100% - 2rem);
   display: flex;
+  justify-content: center;
   flex-direction: row;
   gap: 2rem;
   transition: all 0.3s ease;
