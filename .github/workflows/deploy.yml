@@ -1,4 +1,4 @@
-name: Deploy (Simple)
+name: Deploy
 
 on:
   push:
@@ -10,7 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to server
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for non-static files
+        id: check
+        run: |
+          git fetch origin main
+          CHANGED=$(git diff --name-only origin/main | grep -v '^static/' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to server (code changes)
+        if: steps.check.outputs.changed == 'true'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
@@ -18,9 +33,21 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            sudo killall node
             cd ~/deploy/veloxzerror
             git fetch origin
             git reset --hard origin/main
             npm install
             pm2 restart veloxzerror || pm2 start npm --name veloxzerror -- start
+
+      - name: Update static files only
+        if: steps.check.outputs.changed == 'false'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/deploy/veloxzerror
+            git fetch origin
+            git reset --hard origin/main
