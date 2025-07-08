@@ -13,7 +13,6 @@ export class AppService {
         <body>
           <div id="app">
             <h1 class="h">I am Velox0</h1>
-            <div>My name is Veloxzerror.</div>
             <div>
               I am a backend developer (and a bit of
               <a href="/art">artist</a>?).
