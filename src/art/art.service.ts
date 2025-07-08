@@ -9,6 +9,7 @@ export class ArtService {
     description: string;
     image: string;
     color: string;
+    optimized: string;
     video?: string;
   }[] = [];
   private artPage: string;
@@ -21,6 +22,7 @@ export class ArtService {
         description: 'hAste. An autological work piece!',
         image: '/static/art/haste/haste.png',
         color: '#ff7777',
+        optimized: '/static/art/haste/haste.webp',
         video: '/static/art/haste/haste.mp4',
       },
       {
@@ -29,6 +31,7 @@ export class ArtService {
         description: 'Life of Pablo - Kanye West album',
         image: '/static/art/lop/lop.png',
         color: '#ffaa99',
+        optimized: '/static/art/lop/lop.webp',
         video: '/static/art/lop/lop.mp4',
       },
       {
@@ -37,6 +40,7 @@ export class ArtService {
         description: 'Diwali - shoutout to my favorite festival!',
         image: '/static/art/lights/lights.png',
         color: '#ff7799',
+        optimized: '/static/art/lights/lights.webp',
         video: '/static/art/lights/lights.mp4',
       },
       {
@@ -45,6 +49,7 @@ export class ArtService {
         description: 'Formula 1 - car',
         image: '/static/art/f1/f1.png',
         color: '#ff7799',
+        optimized: '/static/art/f1/f1.webp',
         video: '/static/art/f1/f1.mp4',
       },
       {
@@ -53,6 +58,7 @@ export class ArtService {
         description: '3d eye with geometry nodes',
         image: '/static/art/eye/eye.png',
         color: '#ccffff',
+        optimized: '/static/art/eye/eye.webp',
         video: '/static/art/eye/eye.mp4',
       },
       {
@@ -61,6 +67,7 @@ export class ArtService {
         description: 'Daft Punk - Thomas Bangalter helmet',
         image: '/static/art/daft-punk/daft-punk.png',
         color: '#ffdddd',
+        optimized: '/static/art/daft-punk/daft-punk.webp',
         video: '/static/art/daft-punk/daft-punk.mp4',
       },
       {
@@ -69,6 +76,7 @@ export class ArtService {
         description: 'My first 3d work. A for apple.',
         image: 'static/art/apple/apple.jpg',
         color: '#ffcccc',
+        optimized: '/static/art/apple/apple.webp',
         video: '/static/art/apple/apple.mp4',
       },
     ];
@@ -83,7 +91,7 @@ export class ArtService {
         <div class="post" data-key="${art.key}" data-color="${art.color}">
           <a href="/art/${art.key}" class="nostyle">
             <h2>${art.title}</h2>
-            <img src="${art.image}" alt="${art.description}" />
+            <img src="${art.optimized}" srcset="${art.image} 2x" alt="${art.description}" />
           </a>
           <div class="post-content">
             <p>${art.description}</p>
@@ -106,10 +114,6 @@ export class ArtService {
         .map((art) => art.image)
         .join('')}
       </div>
-      <br />
-      <br />
-      <br />
-      <p>If the images stretch, your network is sucks ahh. <small>I'm working on it.</small></p>
       <script>
       let done = false;
       let post = document.getElementsByClassName('post');
