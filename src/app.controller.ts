@@ -13,4 +13,9 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('resume')
+  getResume(): string {
+    return this.appService.getResume();
+  }
 }

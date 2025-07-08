@@ -34,35 +34,16 @@ export class AppService {
               >
             </div>
             <div>
-              gitlab:
-              <a
-                href="https://gitlab.com/velox0"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="gitlab"
-                >Velox0</a
-              >
-            </div>
-            <div>
               email:
               <a
-                href="mailto:veloxzerror@gmail.com"
+                href="mailto:biz@velox0.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="email"
-                >veloxzerror@gmail.com</a
+                >biz@velox0.com</a
               >
             </div>
-            <div>
-              discord:
-              <a
-                href="https://discord.com/users/velox0"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="discord"
-                >velox0</a
-              >
-            </div>
+            <h2>Check out my resume <a href="/resume">here</a>.</h2>
           </div>
           <script>
             const techStack = [
@@ -92,5 +73,18 @@ export class AppService {
           </script>
         </body>
       </html>`.toString();
+  }
+
+  getResume(): string {
+    return `<!DOCTYPE html>
+      <html lang="en">
+        ${this.createPageService.createHead('Velox0 - Resume')}
+        <body>
+          <div id="app">
+            <h1 class="h">Resume</h1>
+            <img src="https://media1.tenor.com/m/f7K_LN-WfZIAAAAC/sparkles-and-champagne.gif" alt="Resume" />
+          </div>
+        </body>
+      </html>`;
   }
 }
