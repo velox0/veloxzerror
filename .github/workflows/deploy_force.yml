@@ -1,0 +1,26 @@
+name: Deploy (Force)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/deploy/veloxzerror
+            git fetch origin
+            git reset --hard origin/main
+            npm install
+            pm2 restart veloxzerror || pm2 start npm --name veloxzerror -- start
