@@ -39,7 +39,7 @@ export class ArtService {
         title: 'Lights',
         description: 'Diwali - shoutout to my favorite festival!',
         image: '/static/art/lights/lights.png',
-        color: '#ff7799',
+        color: '#aabbff',
         optimized: '/static/art/lights/lights.webp',
         video: '/static/art/lights/lights.mp4',
       },
@@ -109,7 +109,7 @@ export class ArtService {
       <p>Some stuff I made mostly in blender.</p>
       <p class="mobile-only" style="padding: 10px; opacity: 0.5;">This page is meant to be viewed on desktop.
       Here is a shitty portrait version for you.</p>
-      <div id="post-container">
+      <div id="post-container" style="margin-bottom: 20px;">
       ${this.getArt()
         .map((art) => art.image)
         .join('')}
