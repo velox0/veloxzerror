@@ -9,7 +9,19 @@ export class AppService {
   getHello(): string {
     return html`<!DOCTYPE html>
       <html lang="en">
-        ${this.createPageService.createHead('Velox0')}
+        ${this.createPageService.createHead('Velox0', [], [], "https://velox0.com/", [
+          {property: "og:title", content: "Velox0 profile"},
+          {property: "og:description", content: "Home page of https://velox0.com"},
+          {property: "og:url", content: "https://velox0.com/"},
+          {property: "og:image", content: "https://velox0.com/static/art/haste/haste.webp"},
+          {property: "og:image", content: "https://velox0.com/static/art/lop/lop.webp"},
+          {property: "og:image", content: "https://velox0.com/static/art/lights/lights.webp"},
+          {property: "og:image", content: "https://velox0.com/static/art/f1/f1.webp"},
+          {property: "og:image", content: "https://velox0.com/static/art/eye/eye.webp"},
+          {property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp"},
+          {property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp"},
+          {property: "og:type", content: "article"},
+        ])}
         <body>
           <div id="app">
             <h1 class="h">I am Velox0</h1>
@@ -78,7 +90,12 @@ export class AppService {
   getResume(): string {
     return `<!DOCTYPE html>
       <html lang="en">
-        ${this.createPageService.createHead('Velox0 - Resume')}
+        ${this.createPageService.createHead('Velox0 - Resume', [], [], "https://velox.com/resume", [
+          {property: "og:title", content: "Velox0 resume"},
+          {property: "og:description", content: "Velox0's Resume"},
+          {property: "og:url", content: "https://velox0.com/resume"},
+          {property: "og:type", content: "website"},
+        ])}
         <body>
           <div id="app">
             <p><a href="/" class="nostyle">← Home</a></p>

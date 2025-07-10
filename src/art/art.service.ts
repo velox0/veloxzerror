@@ -20,7 +20,7 @@ export class ArtService {
         key: 'hAste',
         title: 'hAste',
         description: 'hAste. An autological work piece!',
-        image: '/static/art/haste/haste.png',
+        image: '/static/art/haste/hastec.jpg',
         color: '#ff7777',
         optimized: '/static/art/haste/haste.webp',
         video: '/static/art/haste/haste.mp4',
@@ -29,7 +29,7 @@ export class ArtService {
         key: 'life-of-pablo',
         title: 'Life of Pablo',
         description: 'Life of Pablo - Kanye West album',
-        image: '/static/art/lop/lop.png',
+        image: '/static/art/lop/lopc.jpg',
         color: '#ffaa99',
         optimized: '/static/art/lop/lop.webp',
         video: '/static/art/lop/lop.mp4',
@@ -38,7 +38,7 @@ export class ArtService {
         key: 'fireworks',
         title: 'Lights',
         description: 'Diwali - shoutout to my favorite festival!',
-        image: '/static/art/lights/lights.png',
+        image: '/static/art/lights/lightsc.jpg',
         color: '#aabbff',
         optimized: '/static/art/lights/lights.webp',
         video: '/static/art/lights/lights.mp4',
@@ -47,7 +47,7 @@ export class ArtService {
         key: 'f1',
         title: 'f1',
         description: 'Formula 1 - car',
-        image: '/static/art/f1/f1.png',
+        image: '/static/art/f1/f1c.jpg',
         color: '#ff7799',
         optimized: '/static/art/f1/f1.webp',
         video: '/static/art/f1/f1.mp4',
@@ -56,7 +56,7 @@ export class ArtService {
         key: 'eye',
         title: 'Eye',
         description: '3d eye with geometry nodes',
-        image: '/static/art/eye/eye.png',
+        image: '/static/art/eye/eyec.jpg',
         color: '#ccffff',
         optimized: '/static/art/eye/eye.webp',
         video: '/static/art/eye/eye.mp4',
@@ -65,7 +65,7 @@ export class ArtService {
         key: 'daft-punk',
         title: 'Daft Punk',
         description: 'Daft Punk - Thomas Bangalter helmet',
-        image: '/static/art/daft-punk/daft-punk.png',
+        image: '/static/art/daft-punk/daft-punkc.jpg',
         color: '#ffdddd',
         optimized: '/static/art/daft-punk/daft-punk.webp',
         video: '/static/art/daft-punk/daft-punk.mp4',
@@ -74,7 +74,7 @@ export class ArtService {
         key: 'apple',
         title: 'Apple',
         description: 'My first 3d work. A for apple.',
-        image: 'static/art/apple/apple.jpg',
+        image: 'static/art/apple/applec.jpg',
         color: '#ffcccc',
         optimized: '/static/art/apple/apple.webp',
         video: '/static/art/apple/apple.mp4',
@@ -103,7 +103,7 @@ export class ArtService {
 
   private genArtPage() {
     return this.createPageService.createPage(
-      'Art',
+      'Art by Velox0',
       `<p><a href="/" class="nostyle">← Home</a></p>
       <h1 class='h'>Art</h1>
       <p>Some stuff I made mostly in blender.</p>
@@ -130,6 +130,19 @@ export class ArtService {
        </script>`,
       ['/static/styles.css', '/static/posts.css'],
       ['/static/posts.js'],
+      "https://velox0.com/art",
+      [{property: "og:title", content: "Art by velox0"},
+        {property: "og:description", content: "A catalogue of artworks by velox0"},
+        {property: "og:image", content: "https://velox0.com/static/art/eye/eye.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/haste/haste.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/f1/f1.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/lop/lop.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/lights/lights.webp"},
+        {property: "og:url", content: "https://velox0.com/art"},
+        {property: "og:type", content: "website"}
+      ]
     );
   }
 

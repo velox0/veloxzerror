@@ -6,6 +6,8 @@ export class CreatePageService {
     title: string,
     styles: string[] = [],
     scripts: string[] = [],
+    href: string,
+    metadata?: {property: string, content: string}[],
   ): string {
     return `
       <head>
@@ -14,6 +16,10 @@ export class CreatePageService {
         <title>${title}</title>
         <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
         <link rel="stylesheet" href="static/styles.css" />
+        <link rel="canonical" href="${href}" />
+        ${metadata
+          ?.map((meta) => `<meta property="${meta.property}" content="${meta.content}" />`)
+          .join('') || ''}
         ${styles
           .map((style) => `<link rel="stylesheet" href="${style}" />`)
           .join('')}
@@ -29,10 +35,12 @@ export class CreatePageService {
     body: string,
     styles: string[] = [],
     scripts: string[] = [],
+    href?: string,
+    metadata?: {property: string, content: string}[],
   ): string {
     return `<!DOCTYPE html>
       <html lang="en">
-        ${this.createHead(title, styles, scripts)}
+        ${this.createHead(title, styles, scripts, href || '/', metadata)}
         <body>
           <div id="app">${body}</div>
         </body>
@@ -43,10 +51,11 @@ export class CreatePageService {
     title: string,
     error: string,
     backlink?: { text: string; href: string },
+    metadata?: {property: string, content: string}[],
   ): string {
     return `<!DOCTYPE html>
       <html lang="en">
-        ${this.createHead(title, ['/static/styles.css'])}
+        ${this.createHead(title, ['/static/styles.css'], [], backlink ? backlink.href : '/', metadata)}
         <body>
           <div id="app">
             <p><a href="${backlink ? backlink.href : '/'}" class="nostyle">← ${
