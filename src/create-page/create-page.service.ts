@@ -8,6 +8,7 @@ export class CreatePageService {
     scripts: string[] = [],
     href: string,
     metadata?: {property: string, content: string}[],
+    description?: string,
   ): string {
     return `
       <head>
@@ -26,6 +27,7 @@ export class CreatePageService {
         ${scripts
           .map((script) => `<script src="${script}" defer></script>`)
           .join('')}
+        ${description?`<meta name="description" content="`+ description + `" />`: ""}
       </head>
     `;
   }
@@ -37,10 +39,11 @@ export class CreatePageService {
     scripts: string[] = [],
     href?: string,
     metadata?: {property: string, content: string}[],
+    description?: string,
   ): string {
     return `<!DOCTYPE html>
       <html lang="en">
-        ${this.createHead(title, styles, scripts, href || '/', metadata)}
+        ${this.createHead(title, styles, scripts, href || '/', metadata, description)}
         <body>
           <div id="app">${body}</div>
         </body>

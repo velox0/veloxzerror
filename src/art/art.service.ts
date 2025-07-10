@@ -133,16 +133,17 @@ export class ArtService {
       "https://velox0.com/art",
       [{property: "og:title", content: "Art by velox0"},
         {property: "og:description", content: "A catalogue of artworks by velox0"},
-        {property: "og:image", content: "https://velox0.com/static/art/eye/eye.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp"},
         {property: "og:image", content: "https://velox0.com/static/art/haste/haste.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/f1/f1.webp"},
         {property: "og:image", content: "https://velox0.com/static/art/lop/lop.webp"},
         {property: "og:image", content: "https://velox0.com/static/art/lights/lights.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/f1/f1.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/eye/eye.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp"},
+        {property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp"},
         {property: "og:url", content: "https://velox0.com/art"},
         {property: "og:type", content: "website"}
-      ]
+      ],
+      "A catalogue of artworks by velox0"
     );
   }
 

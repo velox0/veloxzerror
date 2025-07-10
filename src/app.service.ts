@@ -21,7 +21,8 @@ export class AppService {
           {property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp"},
           {property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp"},
           {property: "og:type", content: "article"},
-        ])}
+        ], "Home page of https://velox0.com",
+      )}
         <body>
           <div id="app">
             <h1 class="h">I am Velox0</h1>
@@ -95,7 +96,7 @@ export class AppService {
           {property: "og:description", content: "Velox0's Resume"},
           {property: "og:url", content: "https://velox0.com/resume"},
           {property: "og:type", content: "website"},
-        ])}
+        ], "Velox0's Resume")}
         <body>
           <div id="app">
             <p><a href="/" class="nostyle">← Home</a></p>
