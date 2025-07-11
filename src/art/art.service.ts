@@ -104,7 +104,7 @@ export class ArtService {
   private genArtPage() {
     return this.createPageService.createPage(
       'Art - Velox0',
-      `<p><a href="/" class="nostyle">← Home</a></p>
+      `<div><a href="/" class="nostyle">← Home</a></div>
       <h1 class='h'>Art</h1>
       <p>Some stuff I made mostly in blender.</p>
       <p class="mobile-only" style="padding: 10px; opacity: 0.5;">This page is meant to be viewed on desktop.

@@ -99,7 +99,7 @@ export class AppService {
         ], "Velox0's Resume")}
         <body>
           <div id="app">
-            <p><a href="/" class="nostyle">← Home</a></p>
+            <div><a href="/" class="nostyle">← Home</a></div>
             <h1 class="h">Resume</h1>
             <img src="https://media1.tenor.com/m/f7K_LN-WfZIAAAAC/sparkles-and-champagne.gif" alt="Resume" />
           </div>

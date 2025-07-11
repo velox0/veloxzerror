@@ -61,9 +61,9 @@ export class CreatePageService {
         ${this.createHead(title, ['/static/styles.css'], [], backlink ? backlink.href : '/', metadata)}
         <body>
           <div id="app">
-            <p><a href="${backlink ? backlink.href : '/'}" class="nostyle">← ${
+            <div><a href="${backlink ? backlink.href : '/'}" class="nostyle">← ${
               backlink ? backlink.text : 'Home'
-            }</a></p>
+            }</a></div>
             <h1 class="h">${title}</h1>
             <p>${error}</p>
           </div>
