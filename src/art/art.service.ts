@@ -103,7 +103,7 @@ export class ArtService {
 
   private genArtPage() {
     return this.createPageService.createPage(
-      'Art by Velox0',
+      'Art - Velox0',
       `<p><a href="/" class="nostyle">← Home</a></p>
       <h1 class='h'>Art</h1>
       <p>Some stuff I made mostly in blender.</p>

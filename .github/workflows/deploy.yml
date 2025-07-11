@@ -22,7 +22,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/deploy/veloxzerror
-            git fetch origin
+            git fetch origin --depth 1
             git reset --hard origin/main
             npm install
             pm2 restart veloxzerror || pm2 start npm --name veloxzerror -- start

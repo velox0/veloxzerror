@@ -91,7 +91,7 @@ export class AppService {
   getResume(): string {
     return `<!DOCTYPE html>
       <html lang="en">
-        ${this.createPageService.createHead('Velox0 - Resume', [], [], "https://velox.com/resume", [
+        ${this.createPageService.createHead('Velox0 - Resume', [], [], "https://velox0.com/resume", [
           {property: "og:title", content: "Velox0 resume"},
           {property: "og:description", content: "Velox0's Resume"},
           {property: "og:url", content: "https://velox0.com/resume"},
