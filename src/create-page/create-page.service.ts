@@ -9,7 +9,11 @@ export class CreatePageService {
     href: string,
     metadata?: {property: string, content: string}[],
     description?: string,
+    keywords?: string[],
   ): string {
+    const keywordList = ["3d artist", "backend", "back-end", "developer", "engineer", "computer science", "intern", "velox", "velox0", "systems"];
+    keywords = keywords?keywords:[];
+    keywords.push(...keywordList);
     return `
       <head>
         <meta charset="UTF-8" />
@@ -28,6 +32,7 @@ export class CreatePageService {
           .map((script) => `<script src="${script}" defer></script>`)
           .join('')}
         ${description?`<meta name="description" content="`+ description + `" />`: ""}
+        ${keywords?`<meta name="keywords" content="` + (keywords.join(',')) + `" />`:""}
       </head>
     `;
   }
@@ -40,10 +45,11 @@ export class CreatePageService {
     href?: string,
     metadata?: {property: string, content: string}[],
     description?: string,
+    keywords?: string[],
   ): string {
     return `<!DOCTYPE html>
       <html lang="en">
-        ${this.createHead(title, styles, scripts, href || '/', metadata, description)}
+        ${this.createHead(title, styles, scripts, href || '/', metadata, description, keywords)}
         <body>
           <div id="app">${body}</div>
         </body>

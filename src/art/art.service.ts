@@ -143,7 +143,8 @@ export class ArtService {
         {property: "og:url", content: "https://velox0.com/art"},
         {property: "og:type", content: "website"}
       ],
-      "A catalogue of artworks by velox0"
+      "A catalogue of artworks by velox0",
+      ["3d art", "blender"]
     );
   }
 

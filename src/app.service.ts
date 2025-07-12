@@ -13,15 +13,9 @@ export class AppService {
           {property: "og:title", content: "Velox0 profile"},
           {property: "og:description", content: "Home page of https://velox0.com"},
           {property: "og:url", content: "https://velox0.com/"},
-          {property: "og:image", content: "https://velox0.com/static/art/haste/haste.webp"},
-          {property: "og:image", content: "https://velox0.com/static/art/lop/lop.webp"},
-          {property: "og:image", content: "https://velox0.com/static/art/lights/lights.webp"},
-          {property: "og:image", content: "https://velox0.com/static/art/f1/f1.webp"},
-          {property: "og:image", content: "https://velox0.com/static/art/eye/eye.webp"},
-          {property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp"},
-          {property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp"},
+          {property: "og:image", content: "https://velox0.com/favicon.ico"},
           {property: "og:type", content: "article"},
-        ], "Home page of https://velox0.com",
+        ], "Velox0 is a systems-programmer/backend developer and a 3d artist",
       )}
         <body>
           <div id="app">
