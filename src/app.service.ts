@@ -54,12 +54,13 @@ export class AppService {
           </div>
           <script>
             const techStack = [
-              'AWS (EC2, Lightsail, etc.)',
+              'AWS (EC2, S3, etc.)',
               'CockroachDB',
               'Docker',
               'GitHub Actions',
-              'Nginx',
               'MongoDB',
+              'SFML',
+              'Web3',
               'and much more!',
             ];
             let i = 1;
