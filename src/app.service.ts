@@ -9,7 +9,7 @@ export class AppService {
   getHello(): string {
     return html`<!DOCTYPE html>
       <html lang="en">
-        ${this.createPageService.createHead('Velox0', [], [], "https://velox0.com/", [
+      ${this.createPageService.createHead('Velox0', [], [], "https://velox0.com/", [
       { property: "og:title", content: "Velox0 profile" },
       { property: "og:description", content: "Home page of https://velox0.com" },
       { property: "og:url", content: "https://velox0.com/" },
@@ -28,7 +28,8 @@ export class AppService {
             <div>I write in C, C++, JS, TS, Python, Go, and more.</div>
             <div>
               I am experienced in
-              <span id="tech">AWS (EC2, Lightsail, etc.)</span>
+              <span id="tech">AWS (EC2, S3, etc.)</span><span
+              style="display:none;">, CockroachDB, Docker, GitHub Actions, MongoDB, SFML, Web3, and much more.</span>
             </div>
             <div>
               github:
@@ -50,7 +51,9 @@ export class AppService {
                 >veloxzerror@gmail.com</a
               >
             </div>
-            <h2>Check out my resume <a href="/resume">here</a>.</h2>
+            <div>
+            Check out my projects <a href="/projects">here</a>.
+            </div>
           </div>
           <script>
             const techStack = [
@@ -96,7 +99,7 @@ export class AppService {
           <div id="app">
             <div><a href="/" class="nostyle">← Home</a></div>
             <h1 class="h">Resume</h1>
-            <img src="https://media1.tenor.com/m/f7K_LN-WfZIAAAAC/sparkles-and-champagne.gif" alt="Resume" />
+            <img src="https://media1.tenor.com/m/f7K_LN-WfZIAAAAC/sparkles-and-champagne.gif" alt="Sparkles and Champagne" />
           </div>
         </body>
       </html>`;

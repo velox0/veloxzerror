@@ -6,6 +6,7 @@ import { join } from 'path';
 import { ArtModule } from './art/art.module';
 import { CreatePageModule } from './create-page/create-page.module';
 import { CreatePageService } from './create-page/create-page.service';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CreatePageService } from './create-page/create-page.service';
     }),
     ArtModule,
     CreatePageModule,
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService, CreatePageService],

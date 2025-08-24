@@ -7,11 +7,16 @@ export class ArtController {
   constructor(
     private readonly artService: ArtService,
     private readonly createPageService: CreatePageService,
-  ) {}
+  ) { }
 
   @Get()
   getArtPage() {
     return this.artService.getArtPage();
+  }
+
+  @Get('/f1')
+  getF1Page() {
+    return this.artService.getF1Page();
   }
 
   @Get('/*')

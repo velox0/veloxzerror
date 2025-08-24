@@ -20,7 +20,7 @@ export class CreatePageService {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>${title}</title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="stylesheet" href="static/styles.css" />
+        <link rel="stylesheet" href="/static/styles.css" />
         <link rel="canonical" href="${href}" />
         ${metadata
           ?.map((meta) => `<meta property="${meta.property}" content="${meta.content}" />`)

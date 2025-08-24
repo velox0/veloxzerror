@@ -13,6 +13,7 @@ export class ArtService {
     video?: string;
   }[] = [];
   private artPage: string;
+  private f1Page: string;
 
   constructor(private readonly createPageService: CreatePageService) {
     this.art = [
@@ -50,7 +51,7 @@ export class ArtService {
         image: '/static/art/f1/f1c.jpg',
         color: '#ff7799',
         optimized: '/static/art/f1/f1.webp',
-        video: '/static/art/f1/f1.mp4',
+        video: '/static/art/f1/fone_compressed.mp4',
       },
       {
         key: 'eye',
@@ -80,29 +81,7 @@ export class ArtService {
         video: '/static/art/apple/apple.mp4',
       },
     ];
-    this.artPage = this.genArtPage();
-  }
-
-  private getArt() {
-    return this.art.map((art) => {
-      return {
-        ...art,
-        image: `
-        <div class="post" data-key="${art.key}" data-color="${art.color}">
-          <a href="/art/${art.key}" class="nostyle">
-            <h2>${art.title}</h2>
-            <img src="${art.optimized}" srcset="${art.image} 2x" alt="${art.description}" />
-          </a>
-          <div class="post-content">
-            <p>${art.description}</p>
-          </div>
-        </div>`,
-      };
-    });
-  }
-
-  private genArtPage() {
-    return this.createPageService.createPage(
+    this.artPage = this.createPageService.createPage(
       'Art - Velox0',
       `<div><a href="/" class="nostyle">← Home</a></div>
       <h1 class='h'>Art</h1>
@@ -126,29 +105,73 @@ export class ArtService {
           }, 150);
         } else done = true;
       }
-      togglePost(post.length - 1); // start from the last post
+      window.addEventListener("load",function(event) {
+        togglePost(post.length - 1);
+      },false);
        </script>`,
-      ['/static/styles.css', '/static/posts.css'],
-      ['/static/posts.js'],
+      ['/static/styles.css', '/static/posts.css', '/static/curtain.css'],
+      ['/static/posts.js', '/static/curtain.js'],
       "https://velox0.com/art",
-      [{property: "og:title", content: "Art by velox0"},
-        {property: "og:description", content: "A catalogue of artworks by velox0"},
-        {property: "og:image", content: "https://velox0.com/static/art/haste/haste.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/lop/lop.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/lights/lights.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/f1/f1.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/eye/eye.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp"},
-        {property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp"},
-        {property: "og:url", content: "https://velox0.com/art"},
-        {property: "og:type", content: "website"}
+      [{ property: "og:title", content: "Art by velox0" },
+      { property: "og:description", content: "A catalogue of artworks by velox0" },
+      { property: "og:image", content: "https://velox0.com/static/art/haste/haste.webp" },
+      { property: "og:image", content: "https://velox0.com/static/art/lop/lop.webp" },
+      { property: "og:image", content: "https://velox0.com/static/art/lights/lights.webp" },
+      { property: "og:image", content: "https://velox0.com/static/art/f1/f1.webp" },
+      { property: "og:image", content: "https://velox0.com/static/art/eye/eye.webp" },
+      { property: "og:image", content: "https://velox0.com/static/art/daft-punk/daft-punk.webp" },
+      { property: "og:image", content: "https://velox0.com/static/art/apple/apple.webp" },
+      { property: "og:url", content: "https://velox0.com/art" },
+      { property: "og:type", content: "website" }
       ],
       "A catalogue of artworks by velox0",
       ["3d art", "blender"]
     );
+
+    this.f1Page = this.createPageService.createPage(
+      'F1',
+      `<video id="bg-video" autoplay loop muted playsinline style="position:fixed;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1;pointer-events:none;">
+        <source src="https://velox0.com/files/f1/bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div><a href="/art" class="nostyle" style="margin-top:24px;">← Art</a></div>
+      <h1 class='h' style="margin-top:12px;">F1</h1>
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:25px;">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <video id="center-video" autoplay loop controls playsinline>
+            <source src="${this.art.find(a => a.key === 'f1')?.video}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>`,
+      ['/static/styles.css', '/static/curtain.css', '/static/art/styles.css'],
+      ['/static/curtain.js']
+    );
+  }
+
+  private getArt() {
+    return this.art.map((art) => {
+      return {
+        ...art,
+        image: `
+        <div class="post" data-key="${art.key}" data-color="${art.color}">
+          <a href="/art/${art.key}" class="nostyle">
+            <h2>${art.title}</h2>
+            <img src="${art.optimized}" srcset="${art.image} 2x" alt="${art.description}" />
+          </a>
+          <div class="post-content">
+            <p>${art.description}</p>
+          </div>
+        </div>`,
+      };
+    });
   }
 
   getArtPage() {
     return this.artPage;
+  }
+
+  getF1Page() {
+    return this.f1Page;
   }
 }
