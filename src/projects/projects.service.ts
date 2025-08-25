@@ -82,7 +82,7 @@ export class ProjectsService {
     async getProjectsPage(): Promise<any> {
         const projects = await this.getProjects();
         return this.createPageService.createPage(
-            "Projects",
+            "Projects - Velox0",
             `
             <div><a href="/" class="nostyle">← Home</a></div>
             <h1 class='h'>Projects</h1>
@@ -99,10 +99,10 @@ export class ProjectsService {
             [],
             "https://velox0.com/projects", [
             { property: "og:title", content: "Velox0's Projects" },
-            { property: "og:description", content: "Velox0's Projects" },
+            { property: "og:description", content: "A collection of my projects from GitHub — mostly backend tools and microservices." },
             { property: "og:url", content: "https://velox0.com/projects" },
             { property: "og:type", content: "website" },
-        ], "Velox0's Projects",
+        ], "A collection of my projects from GitHub — mostly backend tools and microservices.",
             ["velox0", "github", "projects", "code", "programming", "software", "development"]);
     }
 }
