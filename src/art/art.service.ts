@@ -85,7 +85,7 @@ export class ArtService {
       'Art - Velox0',
       `<div><a href="/" class="nostyle">← Home</a></div>
       <h1 class='h'>Art</h1>
-      <p>Some stuff I made mostly in blender.</p>
+      <p style="margin-bottom:20px;">Some stuff I made mostly in blender.</p>
       <div id="post-container" style="margin-bottom: 20px;">
       ${this.getArt()
         .map((art) => art.image)
