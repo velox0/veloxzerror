@@ -86,8 +86,6 @@ export class ArtService {
       `<div><a href="/" class="nostyle">← Home</a></div>
       <h1 class='h'>Art</h1>
       <p>Some stuff I made mostly in blender.</p>
-      <p class="mobile-only" style="padding: 10px; opacity: 0.5;">This page is meant to be viewed on desktop.
-      Here is a shitty portrait version for you.</p>
       <div id="post-container" style="margin-bottom: 20px;">
       ${this.getArt()
         .map((art) => art.image)
