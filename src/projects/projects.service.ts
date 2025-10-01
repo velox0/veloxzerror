@@ -8,12 +8,18 @@ dotenv.config();
 export class ProjectsService {
     GITHUB_API_KEY: string;
     do_not_list: string[];
+    starred_list: string[];
     constructor(private readonly createPageService: CreatePageService) {
         this.GITHUB_API_KEY = process.env.GITHUB_API_KEY || "";
         this.do_not_list = [
             "Velox0",
             "Anime-Girls-Holding-Programming-Books"
         ]
+        this.starred_list = [
+            "Velox0/moonlight-server",
+            "Velox0/embed0",
+            "Velox0/creeper",
+        ];
         console.log("GITHUB_API_KEY", this.GITHUB_API_KEY);
     }
 
@@ -87,7 +93,7 @@ export class ProjectsService {
             <div><a href="/" class="nostyle">← Home</a></div>
             <h1 class='h'>Projects</h1>
             <div class="projects-container" style="width: 100%; display: flex; flex-direction: column; align-items: left; justify-content: center;">` +
-            projects.map((project: any) => `<a href="${project.url}" class="nostyle"><div class="project-card">
+            projects.map((project: any) => `<a href="${project.url}" class="nostyle"><div class="project-card${this.starred_list.includes(project.name) ? " starred" : ""}">
             <div class="project-card-name">{ ${project.name}</div><hr />
             ${this.ifNotNull(project.homepage, "", "font-size:12px; line-height: 32px;", "", project.homepage)}
             ${this.ifNotNull(project.description, "project-card-description", "font-size: 12px; color: var(--color-text);")}

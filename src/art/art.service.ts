@@ -107,8 +107,8 @@ export class ArtService {
         togglePost(post.length - 1);
       },false);
        </script>`,
-      ['/static/styles.css', '/static/posts.css', '/static/curtain.css'],
-      ['/static/posts.js', '/static/curtain.js'],
+      ['/static/styles.css', '/static/posts.css'],
+      ['/static/posts.js',],
       "https://velox0.com/art",
       [{ property: "og:title", content: "Art by velox0" },
       { property: "og:description", content: "A catalogue of artworks by velox0" },
@@ -142,8 +142,8 @@ export class ArtService {
           </video>
         </div>
       </div>`,
-      ['/static/styles.css', '/static/curtain.css', '/static/art/styles.css'],
-      ['/static/curtain.js']
+      ['/static/styles.css', '/static/art/styles.css'],
+      []
     );
   }
 

@@ -1,10 +1,13 @@
 :root {
     --card-bg: #ddd;
+    /* --starred-bg: #ffd90063; */
+    --starred-bg: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --card-bg: #111;
+        --starred-bg: #333;
     }
 }
 
@@ -54,4 +57,25 @@
 
 .project-card-language:hover {
     opacity: 0.8;
+}
+
+.starred {
+    /* blend golden shine gradient */
+    background: linear-gradient(to bottom right, var(--starred-bg), var(--card-bg) 50%, var(--card-bg) 50%, var(--starred-bg) 100%) 200%;
+    background-size: 200% 100%;
+    animation: star-shine 10s ease-in-out infinite;
+}
+
+@keyframes star-shine {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    50% {
+        background-position: 100% 0%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
 }
