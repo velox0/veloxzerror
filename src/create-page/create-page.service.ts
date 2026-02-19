@@ -22,17 +22,23 @@ export class CreatePageService {
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="stylesheet" href="/static/styles.css" />
         <link rel="canonical" href="${href}" />
-        ${metadata
-          ?.map((meta) => `<meta property="${meta.property}" content="${meta.content}" />`)
-          .join('') || ''}
+        <meta name="google-adsense-account" content="ca-pub-6822765610246222">
+        ${
+          metadata
+            ?.map(
+              (meta) =>
+                `<meta property="${meta.property}" content="${meta.content}" />`,
+            )
+            .join('') || ''
+        }
         ${styles
           .map((style) => `<link rel="stylesheet" href="${style}" />`)
           .join('')}
         ${scripts
           .map((script) => `<script src="${script}" defer></script>`)
           .join('')}
-        ${description?`<meta name="description" content="`+ description + `" />`: ""}
-        ${keywords?`<meta name="keywords" content="` + (keywords.join(',')) + `" />`:""}
+        ${description ? `<meta name="description" content="` + description + `" />` : ''}
+        ${keywords ? `<meta name="keywords" content="` + keywords.join(',') + `" />` : ''}
       </head>
     `;
   }
