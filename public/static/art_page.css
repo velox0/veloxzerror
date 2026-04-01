@@ -69,7 +69,7 @@ body {
 }
 
 /* ── Page content ── */
-.art-page {
+.art_page {
   padding: 20px 24px;
   height: 100vh;
   overflow: hidden;
@@ -79,7 +79,7 @@ body {
   flex-direction: column;
 }
 
-.art-page .back-link {
+.art_page .back-link {
   position: relative;
   text-decoration: none;
   color: var(--color-link);
@@ -88,14 +88,14 @@ body {
   margin-bottom: 4px;
 }
 
-.art-page h1 {
+.art_page h1 {
   font-size: clamp(1.6rem, 4vw, 3rem);
   margin-bottom: 4px;
   border-bottom: 1px solid var(--color-text);
   padding-bottom: 2px;
 }
 
-.art-page .art-description {
+.art_page .art-description {
   font-size: 13px;
   opacity: 0.7;
   margin-bottom: 12px;
@@ -152,11 +152,11 @@ body {
 
 /* Responsive: tighter spacing on short screens */
 @media (max-height: 600px) {
-  .art-page h1 {
+  .art_page h1 {
     font-size: 1.4rem;
     margin-bottom: 2px;
   }
-  .art-page .art-description {
+  .art_page .art-description {
     margin-bottom: 6px;
     font-size: 11px;
   }
@@ -188,7 +188,7 @@ body {
   pointer-events: none;
 }
 
-.cinematic .art-page-inner {
+.cinematic .art_page-inner {
   position: relative;
   z-index: 1;
   padding: 20px 24px;
