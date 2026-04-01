@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eye - Velox0</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/static/art-page.css" />
+  <meta property="og:title" content="Eye — Art by Velox0" />
+  <meta property="og:description" content="3d eye with geometry nodes" />
+  <meta property="og:image" content="https://velox0.com/static/art/eye/eye.webp" />
+  <meta property="og:url" content="https://velox0.com/art/eye" />
+  <meta name="description" content="Eye — 3D eye with geometry nodes by Velox0" />
+</head>
+<body>
+  <div id="loader">
+    <div class="spinner"></div>
+    <div class="loader-text">loading</div>
+  </div>
+
+  <div class="art-page">
+    <a href="/art" class="back-link">← Art</a>
+    <h1>Eye</h1>
+    <p class="art-description">3d eye with geometry nodes</p>
+
+    <div class="art-showcase">
+      <img id="hero" src="/static/art/eye/eye.png" alt="3d eye with geometry nodes" />
+    </div>
+  </div>
+
+  <script>
+    const img = document.getElementById('hero');
+    const loader = document.getElementById('loader');
+    if (img.complete) { loader.classList.add('done'); }
+    else { img.onload = () => loader.classList.add('done'); }
+    setTimeout(() => loader.classList.add('done'), 6000);
+  </script>
+</body>
+</html>

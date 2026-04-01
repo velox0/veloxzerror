@@ -1,0 +1,160 @@
+/* variables for color */
+:root {
+  --color-github: #181717;
+  --color-gitlab: #fc6d26;
+  --color-email: #ea4335;
+  --color-discord: #5865f2;
+  --color-link: #5865f2;
+  --color-bg: #fff;
+  --color-text: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #181818;
+    --color-text: #f3f3f3;
+    --color-link: #8ab4f8;
+    --color-github: #f3f3f3;
+    --color-gitlab: #ffb86c;
+    --color-email: #ff7b72;
+    --color-discord: #8ab4f8;
+  }
+}
+
+html {
+  font-family:
+    'Fira Mono', 'JetBrains Mono', 'Menlo', 'Consolas', 'Liberation Mono',
+    'Courier New', Courier;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
+.h {
+  margin-bottom: 10px;
+  padding: 0;
+  border-bottom: 1px solid var(--color-text);
+  background-color: transparent;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.h::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: red;
+  z-index: -1;
+  transition:
+    all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    padding-left 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.h:hover::before {
+  width: 100%;
+}
+
+.h:hover {
+  color: var(--color-bg);
+  padding-left: 20px;
+  border-bottom: 1px solid red;
+}
+
+.h {
+  position: relative;
+  z-index: 1;
+}
+
+.h span {
+  position: relative;
+  z-index: 2;
+}
+
+a {
+  position: relative;
+  text-decoration: none;
+  color: var(--color-link);
+}
+
+.github {
+  color: var(--color-github);
+}
+.gitlab {
+  color: var(--color-gitlab);
+}
+.email {
+  color: var(--color-email);
+}
+.discord {
+  color: var(--color-discord);
+}
+
+a::before {
+  position: absolute;
+  translate: -200%;
+  content: '>';
+  color: transparent;
+  transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a:hover::before {
+  translate: -100%;
+  color: inherit;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  z-index: -1;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  left: -2px;
+}
+
+a::after {
+  background: var(--color-link);
+}
+
+.github::after {
+  background: var(--color-github);
+}
+.gitlab::after {
+  background: var(--color-gitlab);
+}
+.email::after {
+  background: var(--color-email);
+}
+.discord::after {
+  background: var(--color-discord);
+}
+
+a:hover::after {
+  width: calc(100% + 4px);
+}
+
+.nostyle::after {
+  background: transparent;
+}
+
+.nostyle:hover::before {
+  color: transparent;
+}
+
+

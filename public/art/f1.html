@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>F1 - Velox0</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/static/art-page.css" />
+  <meta property="og:title" content="F1 — Art by Velox0" />
+  <meta property="og:description" content="Formula 1 - car" />
+  <meta property="og:image" content="https://velox0.com/static/art/f1/f1.webp" />
+  <meta property="og:url" content="https://velox0.com/art/f1" />
+  <meta name="description" content="Formula 1 car — 3D render by Velox0" />
+</head>
+<body>
+  <!-- Loading overlay -->
+  <div id="loader">
+    <div class="spinner"></div>
+    <div class="loader-text">loading</div>
+  </div>
+
+  <div class="art-page cinematic">
+    <!-- Background video -->
+    <video class="bg-video" id="bg-video" autoplay loop muted playsinline>
+      <source src="/static/art/f1/bg.mp4" type="video/mp4">
+    </video>
+
+    <div class="art-page-inner">
+      <a href="/art" class="back-link">← Art</a>
+      <h1>F1</h1>
+      <p class="art-description">Formula 1 - car</p>
+
+      <div class="center-video-wrap">
+        <video id="main-video" autoplay loop playsinline>
+          <source src="/static/art/f1/fone_compressed.webm" type="video/webm">
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Wait for all content to load before revealing
+    const bgVideo = document.getElementById('bg-video');
+    const mainVideo = document.getElementById('main-video');
+    const loader = document.getElementById('loader');
+
+    let bgReady = false;
+    let mainReady = false;
+
+    function checkReady() {
+      if (bgReady && mainReady) {
+        loader.classList.add('done');
+        bgVideo.play().catch(() => {});
+        mainVideo.play().catch(() => {});
+      }
+    }
+
+    bgVideo.addEventListener('canplaythrough', () => {
+      bgReady = true;
+      checkReady();
+    });
+
+    mainVideo.addEventListener('canplaythrough', () => {
+      mainReady = true;
+      checkReady();
+    });
+
+    // Fallback: remove loader after 8 seconds max
+    setTimeout(() => {
+      loader.classList.add('done');
+    }, 8000);
+  </script>
+</body>
+</html>

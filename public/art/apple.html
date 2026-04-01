@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple - Velox0</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/static/art-page.css" />
+  <meta property="og:title" content="Apple — Art by Velox0" />
+  <meta property="og:description" content="My first 3d work. A for apple." />
+  <meta property="og:image" content="https://velox0.com/static/art/apple/apple.webp" />
+  <meta property="og:url" content="https://velox0.com/art/apple" />
+  <meta name="description" content="Apple — My first 3D work by Velox0" />
+</head>
+<body>
+  <div id="loader">
+    <div class="spinner"></div>
+    <div class="loader-text">loading</div>
+  </div>
+
+  <div class="art-page">
+    <a href="/art" class="back-link">← Art</a>
+    <h1>Apple</h1>
+    <p class="art-description">My first 3d work. A for apple.</p>
+
+    <div class="art-showcase">
+      <img id="hero" src="/static/art/apple/apple.jpg" alt="My first 3d work. A for apple." />
+    </div>
+  </div>
+
+  <script>
+    const img = document.getElementById('hero');
+    const loader = document.getElementById('loader');
+    if (img.complete) { loader.classList.add('done'); }
+    else { img.onload = () => loader.classList.add('done'); }
+    setTimeout(() => loader.classList.add('done'), 6000);
+  </script>
+</body>
+</html>

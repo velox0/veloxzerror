@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Art - Velox0</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="canonical" href="https://velox0.com/art" />
+  <meta name="google-adsense-account" content="ca-pub-6822765610246222">
+  <meta property="og:title" content="Art by velox0" /><meta property="og:description" content="A catalogue of artworks by velox0" /><meta property="og:image" content="https://velox0.com/static/art/haste/haste.webp" /><meta property="og:url" content="https://velox0.com/art" /><meta property="og:type" content="website" />
+  <link rel="stylesheet" href="/static/styles.css" /><link rel="stylesheet" href="/static/posts.css" />
+  <script src="/static/posts.js" defer></script>
+  <meta name="description" content="A catalogue of artworks by velox0" />
+  <meta name="keywords" content="3d art,blender,3d artist,backend,back-end,developer,engineer,computer science,intern,velox,velox0,systems" />
+</head>
+<body>
+  <div id="app">
+    <div><a href="/" class="nostyle">← Home</a></div>
+    <h1 class='h'>Art</h1>
+    <p style="margin-bottom:20px;">Some stuff I made mostly in blender.</p>
+    <div id="post-container" style="margin-bottom: 20px;">
+      <div class="post" data-key="hAste" data-color="#ff7777">
+        <a href="/art/hAste" class="nostyle">
+          <h2>hAste</h2>
+          <img src="/static/art/haste/haste.webp" srcset="/static/art/haste/hastec.jpg 2x" alt="hAste. An autological work piece!" />
+        </a>
+        <div class="post-content">
+          <p>hAste. An autological work piece!</p>
+        </div>
+      </div>
+      <div class="post" data-key="life-of-pablo" data-color="#ffaa99">
+        <a href="/art/life-of-pablo" class="nostyle">
+          <h2>Life of Pablo</h2>
+          <img src="/static/art/lop/lop.webp" srcset="/static/art/lop/lopc.jpg 2x" alt="Life of Pablo - Kanye West album" />
+        </a>
+        <div class="post-content">
+          <p>Life of Pablo - Kanye West album</p>
+        </div>
+      </div>
+      <div class="post" data-key="fireworks" data-color="#aabbff">
+        <a href="/art/fireworks" class="nostyle">
+          <h2>Lights</h2>
+          <img src="/static/art/lights/lights.webp" srcset="/static/art/lights/lightsc.jpg 2x" alt="Diwali - shoutout to my favorite festival!" />
+        </a>
+        <div class="post-content">
+          <p>Diwali - shoutout to my favorite festival!</p>
+        </div>
+      </div>
+      <div class="post" data-key="f1" data-color="#ff7799">
+        <a href="/art/f1" class="nostyle">
+          <h2>f1</h2>
+          <img src="/static/art/f1/f1.webp" srcset="/static/art/f1/f1c.jpg 2x" alt="Formula 1 - car" />
+        </a>
+        <div class="post-content">
+          <p>Formula 1 - car</p>
+        </div>
+      </div>
+      <div class="post" data-key="eye" data-color="#ccffff">
+        <a href="/art/eye" class="nostyle">
+          <h2>Eye</h2>
+          <img src="/static/art/eye/eye.webp" srcset="/static/art/eye/eyec.jpg 2x" alt="3d eye with geometry nodes" />
+        </a>
+        <div class="post-content">
+          <p>3d eye with geometry nodes</p>
+        </div>
+      </div>
+      <div class="post" data-key="daft-punk" data-color="#ffdddd">
+        <a href="/art/daft-punk" class="nostyle">
+          <h2>Daft Punk</h2>
+          <img src="/static/art/daft-punk/daft-punk.webp" srcset="/static/art/daft-punk/daft-punkc.jpg 2x" alt="Daft Punk - Thomas Bangalter helmet" />
+        </a>
+        <div class="post-content">
+          <p>Daft Punk - Thomas Bangalter helmet</p>
+        </div>
+      </div>
+      <div class="post" data-key="apple" data-color="#ffcccc">
+        <a href="/art/apple" class="nostyle">
+          <h2>Apple</h2>
+          <img src="/static/art/apple/apple.webp" srcset="static/art/apple/applec.jpg 2x" alt="My first 3d work. A for apple." />
+        </a>
+        <div class="post-content">
+          <p>My first 3d work. A for apple.</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      let done = false;
+      let post = document.getElementsByClassName('post');
+      function togglePost(index) {
+        post[index].classList.add('open-post');
+        if (index > 0) {
+          setTimeout(() => {
+            post[index].classList.remove('open-post');
+            togglePost(index - 1);
+          }, 150);
+        } else done = true;
+      }
+      window.addEventListener("load",function(event) {
+        togglePost(post.length - 1);
+      },false);
+    </script>
+  </div>
+</body>
+</html>
