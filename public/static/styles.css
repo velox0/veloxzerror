@@ -23,8 +23,8 @@
 
 html {
   font-family:
-    'Fira Mono', 'JetBrains Mono', 'Menlo', 'Consolas', 'Liberation Mono',
-    'Courier New', Courier;
+    "Fira Mono", "JetBrains Mono", "Menlo", "Consolas", "Liberation Mono",
+    "Courier New", Courier;
 }
 
 body {
@@ -51,7 +51,7 @@ body {
 }
 
 .h::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -106,7 +106,7 @@ a {
 a::before {
   position: absolute;
   translate: -200%;
-  content: '>';
+  content: ">";
   color: transparent;
   transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -117,7 +117,7 @@ a:hover::before {
 }
 
 a::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -156,5 +156,3 @@ a:hover::after {
 .nostyle:hover::before {
   color: transparent;
 }
-
-

@@ -1,39 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hAste - Velox0</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/static/art_page.css" />
-  <meta property="og:title" content="hAste — Art by Velox0" />
-  <meta property="og:description" content="hAste. An autological work piece!" />
-  <meta property="og:image" content="https://velox0.com/static/art/haste/haste.webp" />
-  <meta property="og:url" content="https://velox0.com/art/hAste" />
-  <meta name="description" content="hAste — An autological work piece by Velox0" />
-</head>
-<body>
-  <div id="loader">
-    <div class="spinner"></div>
-    <div class="loader-text">loading</div>
-  </div>
-
-  <div class="art_page">
-    <a href="/art" class="back-link">← Art</a>
-    <h1>hAste</h1>
-    <p class="art-description">hAste. An autological work piece!</p>
-
-    <div class="art-showcase">
-      <img id="hero" src="/static/art/haste/haste.png" alt="hAste. An autological work piece!" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>hAste - Velox0</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/static/art_page.css" />
+    <meta property="og:title" content="hAste — Art by Velox0" />
+    <meta
+      property="og:description"
+      content="hAste. An autological work piece!"
+    />
+    <meta
+      property="og:image"
+      content="https://velox0.com/static/art/haste/haste.webp"
+    />
+    <meta property="og:url" content="https://velox0.com/art/hAste" />
+    <meta
+      name="description"
+      content="hAste — An autological work piece by Velox0"
+    />
+  </head>
+  <body>
+    <div id="loader">
+      <div class="spinner"></div>
+      <div class="loader-text">loading</div>
     </div>
-  </div>
 
-  <script>
-    const img = document.getElementById('hero');
-    const loader = document.getElementById('loader');
-    if (img.complete) { loader.classList.add('done'); }
-    else { img.onload = () => loader.classList.add('done'); }
-    setTimeout(() => loader.classList.add('done'), 6000);
-  </script>
-</body>
+    <div class="art_page">
+      <a href="/art" class="back-link">← Art</a>
+      <h1>hAste</h1>
+      <p class="art-description">hAste. An autological work piece!</p>
+
+      <div class="art-showcase">
+        <img
+          id="hero"
+          src="/static/art/haste/haste.png"
+          alt="hAste. An autological work piece!"
+        />
+      </div>
+    </div>
+
+    <script>
+      const img = document.getElementById("hero");
+      const loader = document.getElementById("loader");
+      if (img.complete) {
+        loader.classList.add("done");
+      } else {
+        img.onload = () => loader.classList.add("done");
+      }
+      setTimeout(() => loader.classList.add("done"), 6000);
+    </script>
+  </body>
 </html>
