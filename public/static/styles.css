@@ -14,6 +14,7 @@
     --color-bg: #181818;
     --color-text: #f3f3f3;
     --color-link: #8ab4f8;
+    --color-art: #00fff2;
     --color-github: #f3f3f3;
     --color-gitlab: #ffb86c;
     --color-email: #ff7b72;
@@ -102,6 +103,9 @@ a {
 .discord {
   color: var(--color-discord);
 }
+.art {
+  color: var(--color-art);
+}
 
 a::before {
   position: absolute;
@@ -143,6 +147,9 @@ a::after {
 }
 .discord::after {
   background: var(--color-discord);
+}
+.art::after {
+  background: var(--color-art);
 }
 
 a:hover::after {

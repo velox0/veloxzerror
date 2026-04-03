@@ -1,13 +1,16 @@
 :root {
-  --card-bg: #ddd;
-  /* --starred-bg: #ffd90063; */
-  --starred-bg: #ffffff;
+  --card-bg: #eaeaea;
+  --card-border: #cccccc;
+  --starred-bg: #fff8eb;
+  --starred-border: #ffd700;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --card-bg: #111;
-    --starred-bg: #333;
+    --card-bg: #1e1e1e;
+    --card-border: #333333;
+    --starred-bg: #2b2510;
+    --starred-border: #cca800;
   }
 }
 
@@ -15,74 +18,222 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: left;
+  align-items: stretch;
   justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .project-card {
   position: relative;
-  padding: 10px;
-  margin: 3px;
-  margin-left: 0;
-  padding-left: 40px;
-  transition: all 0.3s ease;
-  min-height: 100px;
-  border-left: 2px solid transparent;
-  background: var(--card-bg);
+  padding: 20px 25px;
+  margin: 0;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: auto;
+  background: var(--color-bg);
+  border: 1px solid var(--card-bg);
+  border-left: 4px solid var(--card-bg);
 }
 
 .project-card:hover {
-  border-left: 2px solid var(--color-text);
+  border-color: var(--color-text);
+  border-left-color: red;
+  transform: translate(-4px, -4px);
+  box-shadow: 6px 6px 0px var(--color-text);
 }
 
 .project-card-name {
-  transition: 0.3s;
-  font-size: 24px;
-  letter-spacing: 1px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-text);
 }
 
 .project-card:hover .project-card-name {
   padding-left: 10px;
-  color: var(--color-text);
+  color: red;
+}
+
+.project-card hr {
+  border: none;
+  border-top: 1px dashed var(--card-bg);
+  margin: 15px 0;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover hr {
+  border-top-color: var(--color-text);
+}
+
+.project-card-description {
+  margin-bottom: 10px;
+  line-height: 1.5;
 }
 
 .project-card-language {
-  padding-left: 5px;
-  padding-right: 5px;
-  border-radius: 2.5px;
+  display: inline-block;
+  padding: 4px 8px;
+  margin-top: 10px;
+  border-radius: 2px;
   color: var(--color-bg);
   background-color: var(--color-text);
-  transition: 0.3s;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover .project-card-language {
+  background-color: red;
 }
 
 .project-card-language:hover {
-  opacity: 0.8;
+  opacity: 0.8 !important;
 }
 
 .starred {
-  /* blend golden shine gradient */
   background: linear-gradient(
-      to bottom right,
-      var(--starred-bg),
-      var(--card-bg) 50%,
-      var(--card-bg) 50%,
-      var(--starred-bg) 100%
-    )
-    200%;
-  background-size: 200% 100%;
-  animation: star-shine 10s ease-in-out infinite;
+    135deg,
+    var(--color-bg) 0%,
+    var(--starred-bg) 50%,
+    var(--color-bg) 100%
+  );
+  background-size: 200% 200%;
+  animation: star-shine 6s ease-in-out infinite;
+  border-left-color: var(--starred-border);
+}
+
+.starred:hover {
+  border-color: var(--starred-border);
+  border-left-color: var(--starred-border);
+  box-shadow: 6px 6px 0px var(--starred-border);
+}
+
+.starred:hover .project-card-name,
+.starred:hover hr {
+  color: var(--starred-border);
+  border-top-color: var(--starred-border);
+}
+
+.starred:hover .project-card-language {
+  background-color: var(--starred-border);
+  color: var(--color-bg);
 }
 
 @keyframes star-shine {
   0% {
-    background-position: 0% 0%;
+    background-position: 0% 50%;
   }
 
   50% {
-    background-position: 100% 0%;
+    background-position: 100% 50%;
   }
 
   100% {
-    background-position: 0% 0%;
+    background-position: 0% 50%;
+  }
+}
+
+#readme-pane {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    max-width: 1600px;
+    gap: 40px;
+  }
+
+  #app {
+    flex: 0 0 350px;
+  }
+
+  #readme-container {
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 40px;
+    flex: 1; /* Naturally fills all remaining flex space */
+    height: calc(100vh - 80px);
+  }
+
+  #readme-pane {
+    display: block;
+    width: 100%;
+    max-width: 650px; /* Constrain the inner pane so it's a bit smaller */
+    height: 100%;
+    overflow-y: auto;
+    background: var(--color-bg);
+    border: 1px solid var(--card-bg);
+    border-top: 4px solid red;
+    box-shadow: -8px 8px 0px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    #readme-pane {
+      border: 1px solid var(--card-border);
+      border-top: 4px solid red;
+      box-shadow: -8px 8px 0px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  #readme-pane.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* CRUCIAL: Re-enable pointer events so it can be scrolled! */
+  }
+
+  #readme-pane {
+    transform: translateY(10px);
+  }
+
+  #readme-pane h1,
+  #readme-pane h2,
+  #readme-pane h3 {
+    margin-top: 0;
+    font-family: inherit;
+    color: var(--color-text);
+  }
+
+  #readme-pane pre {
+    background: var(--card-bg);
+    padding: 20px;
+    overflow-x: auto;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--card-border);
+  }
+
+  #readme-pane code {
+    background: var(--card-bg);
+    padding: 3px 6px;
+    font-size: 14px;
+    border-radius: 2px;
+  }
+
+  #readme-pane img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 10px 0;
+  }
+
+  #readme-pane p,
+  #readme-pane ul,
+  #readme-pane li {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text);
   }
 }

@@ -82,6 +82,7 @@ app.get("/api/projects", async (req, res) => {
         homepage: r.homepage || null,
         language: r.language,
         pushed_at: r.pushed_at,
+        default_branch: r.default_branch,
         starred: STARRED_REPOS.includes(r.name),
       }));
 

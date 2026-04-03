@@ -26,6 +26,7 @@
       name="keywords"
       content="velox0,github,projects,code,programming,software,development,3d artist,backend,back-end,developer,engineer,computer science,intern,velox,velox0,systems"
     />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
 
   <body>
@@ -44,6 +45,12 @@
         "
       >
         <div style="opacity: 0.5; padding: 20px 40px">loading projects...</div>
+      </div>
+    </div>
+    
+    <div id="readme-container">
+      <div id="readme-pane">
+        <div id="readme-content">Hover over a project to see details...</div>
       </div>
     </div>
 
@@ -77,6 +84,49 @@
         return div.innerHTML;
       }
 
+      let currentHoverRepo = null;
+      let cacheReadme = {};
+
+      async function showReadme(repoFullName, branch) {
+        if (window.innerWidth < 1024) return; // Desktop only
+        const pane = document.getElementById("readme-pane");
+        const content = document.getElementById("readme-content");
+        
+        pane.classList.add("visible");
+        
+        if (currentHoverRepo === repoFullName) return;
+        currentHoverRepo = repoFullName;
+        
+        if (cacheReadme[repoFullName]) {
+            content.innerHTML = cacheReadme[repoFullName];
+            return;
+        }
+
+        content.innerHTML = '<div style="opacity:0.5; font-family: monospace;">Fetching README...</div>';
+        
+        try {
+            const baseUrl = `https://raw.githubusercontent.com/${repoFullName}/${branch}/`;
+            const url = `${baseUrl}README.md`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error("No README");
+            const text = await res.text();
+            let html = typeof marked !== 'undefined' ? marked.parse(text) : escapeHtml(text).replace(/\n/g, '<br>');
+            
+            // Rewrite relative paths for images and links to point to the raw GitHub source
+            html = html.replace(/(src|href)=['"](?!http:\/\/|https:\/\/|data:|\/\/|#)(?:\.\/|\/)?([^'"]+)['"]/gi, `$1="${baseUrl}$2"`);
+            
+            cacheReadme[repoFullName] = html;
+            
+            if (currentHoverRepo === repoFullName) {
+                content.innerHTML = html;
+            }
+        } catch(e) {
+            if (currentHoverRepo === repoFullName) {
+                content.innerHTML = '<div style="opacity:0.5; font-family: monospace;">No README available for this project.</div>';
+            }
+        }
+      }
+
       async function loadProjects() {
         const container = document.getElementById("projects-container");
         try {
@@ -99,7 +149,9 @@
             html +=
               '<a href="' +
               escapeHtml(repo.html_url) +
-              '" class="nostyle"><div class="' +
+              '" class="nostyle" onmouseenter="showReadme(\'' +
+              escapeHtml(repo.full_name) + '\', \'' +
+              escapeHtml(repo.default_branch || 'main') + '\')"><div class="' +
               cardClass +
               '">';
             html +=
