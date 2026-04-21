@@ -1,56 +1,67 @@
 require("dotenv").config();
-const express = require("express");
+const fastify = require("fastify")({ logger: true });
 const path = require("path");
-const app = express();
+const fs = require("fs");
+
 const PORT = process.env.PORT || 3000;
 
-// Serve static assets from the public/static directory
-app.use("/static", express.static(path.join(__dirname, "public/static")));
+// Main static files root, allows us to use reply.sendFile("index.html") which looks in "public"
+fastify.register(require("@fastify/static"), {
+  root: path.join(__dirname, "public"),
+  prefix: "/public_hidden/", // just to avoid namespace clash
+  decorateReply: true,
+});
 
-// Serve favicon
-app.get("/favicon.ico", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "favicon.ico"));
+// Serve static assets from public/static under the /static/ route
+fastify.register(require("@fastify/static"), {
+  root: path.join(__dirname, "public", "static"),
+  prefix: "/static/",
+  decorateReply: false,
 });
 
 // Routes
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+fastify.get("/favicon.ico", (req, res) => {
+  return res.sendFile("favicon.ico");
 });
 
-app.get("/art", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "art.html"));
+fastify.get("/", (req, res) => {
+  return res.sendFile("index.html");
 });
 
-app.get("/art/:key", (req, res) => {
+fastify.get("/art", (req, res) => {
+  return res.sendFile("art.html");
+});
+
+fastify.get("/art/:key", (req, res) => {
   const key = req.params.key.replace(/[^a-zA-Z0-9-]/g, "");
   const filePath = path.join(__dirname, "public", "art", `${key}.html`);
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      res.status(404).send("This page does not exist yet!");
-    }
-  });
+  
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).send("This page does not exist yet!");
+  }
+  return res.sendFile(`art/${key}.html`);
 });
 
-app.get("/projects", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "projects.html"));
+fastify.get("/projects", (req, res) => {
+  return res.sendFile("projects.html");
 });
 
-// GitHub API proxy endpoint — keeps the API key server-side
+// GitHub API proxy
 let cachedRepos = null;
 let cacheTime = 0;
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
-app.get("/api/projects", async (req, res) => {
+fastify.get("/api/projects", async (req, res) => {
   try {
     const now = Date.now();
     if (cachedRepos && now - cacheTime < CACHE_TTL) {
-      return res.json(cachedRepos);
+      return cachedRepos;
     }
 
     const token = process.env.GITHUB_API_KEY;
     const headers = {
       Accept: "application/vnd.github.v3+json",
-      "User-Agent": "velox0-express",
+      "User-Agent": "velox0-fastify",
     };
     if (token) {
       headers["Authorization"] = `token ${token}`;
@@ -58,13 +69,13 @@ app.get("/api/projects", async (req, res) => {
 
     const response = await fetch(
       "https://api.github.com/users/Velox0/repos?per_page=100&sort=pushed&direction=desc",
-      { headers },
+      { headers }
     );
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("GitHub API error:", response.status, errorText);
-      return res.status(response.status).json({ error: "GitHub API error" });
+      req.log.error(`GitHub API error: ${response.status} ${errorText}`);
+      return res.status(response.status).send({ error: "GitHub API error" });
     }
 
     const repos = await response.json();
@@ -89,18 +100,25 @@ app.get("/api/projects", async (req, res) => {
     cachedRepos = filtered;
     cacheTime = now;
 
-    res.json(filtered);
+    return filtered;
   } catch (err) {
-    console.error("Error fetching GitHub repos:", err);
-    res.status(500).json({ error: "Internal server error" });
+    req.log.error(`Error fetching GitHub repos: ${err}`);
+    return res.status(500).send({ error: "Internal server error" });
   }
 });
 
 // Custom 404 handler
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+fastify.setNotFoundHandler((req, res) => {
+  return res.status(404).sendFile("404.html");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+const start = async () => {
+  try {
+    await fastify.listen({ port: PORT, host: '0.0.0.0' });
+    console.log(`Server is running on http://localhost:${PORT}`);
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+};
+start();
