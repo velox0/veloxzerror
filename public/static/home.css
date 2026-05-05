@@ -1,0 +1,35 @@
+.role-subtitle {
+    opacity: 0.55;
+    margin-top: 6px;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+.bio {
+    margin: 24px 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1.7;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 4px 0 28px;
+}
+
+.tech-tag {
+    border: 1px solid var(--color-text);
+    padding: 4px 10px;
+    font-size: 13px;
+    opacity: 0.7;
+    letter-spacing: 0.3px;
+}
+
+.links-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

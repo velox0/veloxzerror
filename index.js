@@ -1,5 +1,5 @@
 require("dotenv").config();
-const fastify = require("fastify")({ logger: true });
+const fastify = require("fastify")({logger: false});
 const path = require("path");
 const fs = require("fs");
 
@@ -35,7 +35,7 @@ fastify.get("/art", (req, res) => {
 fastify.get("/art/:key", (req, res) => {
   const key = req.params.key.replace(/[^a-zA-Z0-9-]/g, "");
   const filePath = path.join(__dirname, "public", "art", `${key}.html`);
-  
+
   if (!fs.existsSync(filePath)) {
     return res.status(404).send("This page does not exist yet!");
   }
@@ -69,7 +69,7 @@ fastify.get("/api/projects", async (req, res) => {
 
     const response = await fetch(
       "https://api.github.com/users/Velox0/repos?per_page=100&sort=pushed&direction=desc",
-      { headers }
+        {headers},
     );
 
     if (!response.ok) {
@@ -114,7 +114,7 @@ fastify.setNotFoundHandler((req, res) => {
 
 const start = async () => {
   try {
-    await fastify.listen({ port: PORT, host: '0.0.0.0' });
+    await fastify.listen({port: PORT, host: "0.0.0.0"});
     console.log(`Server is running on http://localhost:${PORT}`);
   } catch (err) {
     fastify.log.error(err);
