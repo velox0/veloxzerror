@@ -46,63 +46,94 @@ fastify.get("/projects", (req, res) => {
   return res.sendFile("projects.html");
 });
 
-// GitHub API proxy
+// GitHub API proxy — disk-persisted cache survives restarts
+const CACHE_FILE = path.join(__dirname, "cache", "projects.json");
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
+const STARRED_REPOS = ["moonlight-server", "embed0", "creeper"];
+
+// Load cache from disk on startup so the first request is never cold
 let cachedRepos = null;
 let cacheTime = 0;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+(function loadDiskCache() {
+  try {
+    if (fs.existsSync(CACHE_FILE)) {
+      const raw = fs.readFileSync(CACHE_FILE, "utf8");
+      const { data, savedAt } = JSON.parse(raw);
+      cachedRepos = data;
+      cacheTime = savedAt;
+      console.log(`[cache] Loaded ${data.length} repos from disk (age: ${Math.round((Date.now() - savedAt) / 1000)}s)`);
+    }
+  } catch (e) {
+    console.warn("[cache] Failed to load disk cache:", e.message);
+  }
+})();
+
+async function fetchAndCacheRepos() {
+  const token = process.env.GITHUB_API_KEY;
+  const headers = {
+    Accept: "application/vnd.github.v3+json",
+    "User-Agent": "velox0-fastify",
+  };
+  if (token) headers["Authorization"] = `token ${token}`;
+
+  const response = await fetch(
+    "https://api.github.com/users/Velox0/repos?per_page=100&sort=pushed&direction=desc",
+    { headers },
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`GitHub API ${response.status}: ${errorText}`);
+  }
+
+  const repos = await response.json();
+
+  const filtered = repos
+    .filter((r) => r.name !== r.owner.login)
+    .map((r) => ({
+      full_name: r.full_name,
+      html_url: r.html_url,
+      description: r.description,
+      homepage: r.homepage || null,
+      language: r.language,
+      pushed_at: r.pushed_at,
+      default_branch: r.default_branch,
+      starred: STARRED_REPOS.includes(r.name),
+    }));
+
+  const now = Date.now();
+  cachedRepos = filtered;
+  cacheTime = now;
+
+  // Persist to disk (non-blocking)
+  fs.mkdirSync(path.dirname(CACHE_FILE), { recursive: true });
+  fs.writeFileSync(CACHE_FILE, JSON.stringify({ data: filtered, savedAt: now }));
+
+  return filtered;
+}
 
 fastify.get("/api/projects", async (req, res) => {
   try {
     const now = Date.now();
+
     if (cachedRepos && now - cacheTime < CACHE_TTL) {
+      // Stale-while-revalidate: if cache is >20 min old, refresh in background
+      if (now - cacheTime > 20 * 60 * 1000) {
+        fetchAndCacheRepos().catch((e) => console.warn("[cache] Background refresh failed:", e.message));
+      }
       return cachedRepos;
     }
 
-    const token = process.env.GITHUB_API_KEY;
-    const headers = {
-      Accept: "application/vnd.github.v3+json",
-      "User-Agent": "velox0-fastify",
-    };
-    if (token) {
-      headers["Authorization"] = `token ${token}`;
-    }
-
-    const response = await fetch(
-      "https://api.github.com/users/Velox0/repos?per_page=100&sort=pushed&direction=desc",
-        {headers},
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      req.log.error(`GitHub API error: ${response.status} ${errorText}`);
-      return res.status(response.status).send({ error: "GitHub API error" });
-    }
-
-    const repos = await response.json();
-
-    // Starred repos (matching live site)
-    const STARRED_REPOS = ["moonlight-server", "embed0", "creeper"];
-
-    // Filter out profile README repo & return only needed fields
-    const filtered = repos
-      .filter((r) => r.name !== r.owner.login)
-      .map((r) => ({
-        full_name: r.full_name,
-        html_url: r.html_url,
-        description: r.description,
-        homepage: r.homepage || null,
-        language: r.language,
-        pushed_at: r.pushed_at,
-        default_branch: r.default_branch,
-        starred: STARRED_REPOS.includes(r.name),
-      }));
-
-    cachedRepos = filtered;
-    cacheTime = now;
-
-    return filtered;
+    // Cache is empty or expired — fetch synchronously
+    return await fetchAndCacheRepos();
   } catch (err) {
     req.log.error(`Error fetching GitHub repos: ${err}`);
+    // Return stale data if available rather than erroring out
+    if (cachedRepos) {
+      console.warn("[cache] Returning stale data due to fetch error");
+      return cachedRepos;
+    }
     return res.status(500).send({ error: "Internal server error" });
   }
 });
