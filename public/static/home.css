@@ -33,3 +33,35 @@
     flex-direction: column;
     gap: 10px;
 }
+
+.art-link {
+    background-size: cover;
+    background-position: center;
+    -webkit-background-clip: text;
+    color: transparent !important;
+    -webkit-text-stroke: 0.1px var(--color-text);
+    animation: bgSwitch 4s infinite step-end;
+}
+
+.art-note {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    font-size: 14px;
+    margin-left: 12px;
+    color: var(--color-text);
+}
+
+.art:hover ~ .art-note {
+    opacity: 0.7;
+}
+
+@keyframes bgSwitch {
+    0% { background-image: url('/static/art/haste/haste-thumb.webp'); }
+    14% { background-image: url('/static/art/daft-punk/daft-punk-thumb.webp'); }
+    28% { background-image: url('/static/art/apple/apple-thumb.webp'); }
+    42% { background-image: url('/static/art/eye/eye-thumb.webp'); }
+    57% { background-image: url('/static/art/f1/f1-thumb.webp'); }
+    71% { background-image: url('/static/art/lights/lights-thumb.webp'); }
+    85% { background-image: url('/static/art/lop/lop-thumb.webp'); }
+    100% { background-image: url('/static/art/haste/haste-thumb.webp'); }
+}

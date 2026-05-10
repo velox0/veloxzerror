@@ -1,40 +1,43 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Apple - Velox0</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="/static/art_page.css" />
-    <meta property="og:title" content="Apple — Art by Velox0" />
-    <meta property="og:description" content="My first 3d work. A for apple." />
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="/static/art_page.css" rel="stylesheet" />
+    <meta content="Apple — Art by Velox0" property="og:title" />
+    <meta content="My first 3d work. A for apple." property="og:description" />
     <meta
-      property="og:image"
       content="https://velox0.com/static/art/apple/apple.webp"
+      property="og:image"
     />
-    <meta property="og:url" content="https://velox0.com/art/apple" />
-    <meta name="description" content="Apple — My first 3D work by Velox0" />
+    <meta content="https://velox0.com/art/apple" property="og:url" />
+    <meta content="Apple — My first 3D work by Velox0" name="description" />
+    <link href="https://velox0.com/art/apple" rel="canonical" />
+    <meta
+      content="velox0, 3d art, systems, programming, backend, developer"
+      name="keywords"
+    />
   </head>
   <body>
     <div id="loader">
       <div class="spinner"></div>
       <div class="loader-text">loading</div>
     </div>
-
     <div class="art_page">
-      <a href="/art" class="back-link">← Art</a>
+      <a class="back-link" href="/art">← Art</a>
       <h1>Apple</h1>
       <p class="art-description">My first 3d work. A for apple.</p>
-
       <div class="art-showcase">
         <img
+          alt="My first 3d work. A for apple."
           id="hero"
           src="/static/art/apple/apple.jpg"
-          alt="My first 3d work. A for apple."
         />
       </div>
     </div>
-
     <script>
       const img = document.getElementById("hero");
       const loader = document.getElementById("loader");

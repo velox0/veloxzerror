@@ -1,21 +1,27 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Eye - Velox0</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="/static/art_page.css" />
-    <meta property="og:title" content="Eye — Art by Velox0" />
-    <meta property="og:description" content="3d eye with geometry nodes" />
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="/static/art_page.css" rel="stylesheet" />
+    <meta content="Eye — Art by Velox0" property="og:title" />
+    <meta content="3d eye with geometry nodes" property="og:description" />
     <meta
-      property="og:image"
       content="https://velox0.com/static/art/eye/eye.webp"
+      property="og:image"
     />
-    <meta property="og:url" content="https://velox0.com/art/eye" />
+    <meta content="https://velox0.com/art/eye" property="og:url" />
     <meta
-      name="description"
       content="Eye — 3D eye with geometry nodes by Velox0"
+      name="description"
+    />
+    <link href="https://velox0.com/art/eye" rel="canonical" />
+    <meta
+      content="velox0, 3d art, systems, programming, backend, developer"
+      name="keywords"
     />
   </head>
   <body>
@@ -23,21 +29,18 @@
       <div class="spinner"></div>
       <div class="loader-text">loading</div>
     </div>
-
     <div class="art_page">
-      <a href="/art" class="back-link">← Art</a>
+      <a class="back-link" href="/art">← Art</a>
       <h1>Eye</h1>
       <p class="art-description">3d eye with geometry nodes</p>
-
       <div class="art-showcase">
         <img
+          alt="3d eye with geometry nodes"
           id="hero"
           src="/static/art/eye/eye.png"
-          alt="3d eye with geometry nodes"
         />
       </div>
     </div>
-
     <script>
       const img = document.getElementById("hero");
       const loader = document.getElementById("loader");
