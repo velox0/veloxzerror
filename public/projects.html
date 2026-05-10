@@ -102,10 +102,8 @@
             }
           }
         } catch (_) {}
-        // Fetch from CDN and cache the source
-        const res = await fetch(
-          "https://cdn.jsdelivr.net/npm/marked/marked.min.js",
-        );
+        // Fetch from local server API and cache the source
+        const res = await fetch("/api/marked.js");
         const src = await res.text();
         try {
           localStorage.setItem(

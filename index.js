@@ -52,6 +52,26 @@ const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 const STARRED_REPOS = ["moonlight-server", "embed0", "creeper"];
 
+const MARKED_CACHE_FILE = path.join(__dirname, "cache", "marked.min.js");
+
+// Pre-fetch marked.js on startup
+(async function initMarkedCache() {
+  try {
+    if (!fs.existsSync(MARKED_CACHE_FILE)) {
+      console.log("[cache] Fetching marked.js from CDN...");
+      const res = await fetch("https://cdn.jsdelivr.net/npm/marked/marked.min.js");
+      if (res.ok) {
+        const text = await res.text();
+        fs.mkdirSync(path.dirname(MARKED_CACHE_FILE), { recursive: true });
+        fs.writeFileSync(MARKED_CACHE_FILE, text);
+        console.log("[cache] Saved marked.js to disk.");
+      }
+    }
+  } catch (e) {
+    console.warn("[cache] Failed to fetch marked.js:", e.message);
+  }
+})();
+
 // Load cache from disk on startup so the first request is never cold
 let cachedRepos = null;
 let cacheTime = 0;
@@ -135,6 +155,22 @@ fastify.get("/api/projects", async (req, res) => {
       return cachedRepos;
     }
     return res.status(500).send({ error: "Internal server error" });
+  }
+});
+
+fastify.get("/api/marked.js", async (req, res) => {
+  try {
+    if (fs.existsSync(MARKED_CACHE_FILE)) {
+      res.header("Content-Type", "application/javascript");
+      res.header("Cache-Control", "public, max-age=604800"); // 7 days
+      const content = fs.readFileSync(MARKED_CACHE_FILE, "utf8");
+      return res.send(content);
+    } else {
+      return res.status(404).send("marked.js not found");
+    }
+  } catch (err) {
+    req.log.error(`Error serving marked.js: ${err}`);
+    return res.status(500).send("Internal server error");
   }
 });
 
