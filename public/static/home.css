@@ -1,67 +1,91 @@
 .role-subtitle {
-    opacity: 0.55;
-    margin-top: 6px;
-    font-size: 14px;
-    letter-spacing: 0.3px;
+  opacity: 0.55;
+  margin-top: 6px;
+  font-size: 14px;
+  letter-spacing: 0.3px;
 }
 
 .bio {
-    margin: 24px 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    line-height: 1.7;
+  margin: 24px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.7;
 }
 
 .tech-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 4px 0 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 28px;
 }
 
 .tech-tag {
-    border: 1px solid var(--color-text);
-    padding: 4px 10px;
-    font-size: 13px;
-    opacity: 0.7;
-    letter-spacing: 0.3px;
+  border: 1px solid var(--color-text);
+  padding: 4px 10px;
+  font-size: 13px;
+  opacity: 0.7;
+  letter-spacing: 0.3px;
 }
 
 .links-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .art-link {
-    background-size: cover;
-    background-position: center;
-    -webkit-background-clip: text;
-    color: transparent !important;
-    -webkit-text-stroke: 0.1px var(--color-text);
-    animation: bgSwitch 4s infinite step-end;
+  --art-bg-image: url("/static/art/haste/haste-thumb.webp");
+  background-image:
+    linear-gradient(
+      rgb(var(--color-text-rgb) / 0.25),
+      rgb(var(--color-text-rgb) / 0.25)
+    ),
+    var(--art-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  color: transparent !important;
+  -webkit-text-stroke: 0.1px var(--color-text);
+  animation: bgSwitch 4s infinite step-end;
 }
 
 .art-note {
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-    font-size: 14px;
-    margin-left: 12px;
-    color: var(--color-text);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  font-size: 14px;
+  margin-left: 12px;
+  color: var(--color-text);
 }
 
 .art:hover ~ .art-note {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 @keyframes bgSwitch {
-    0% { background-image: url('/static/art/haste/haste-thumb.webp'); }
-    14% { background-image: url('/static/art/daft-punk/daft-punk-thumb.webp'); }
-    28% { background-image: url('/static/art/apple/apple-thumb.webp'); }
-    42% { background-image: url('/static/art/eye/eye-thumb.webp'); }
-    57% { background-image: url('/static/art/f1/f1-thumb.webp'); }
-    71% { background-image: url('/static/art/lights/lights-thumb.webp'); }
-    85% { background-image: url('/static/art/lop/lop-thumb.webp'); }
-    100% { background-image: url('/static/art/haste/haste-thumb.webp'); }
+  0% {
+    --art-bg-image: url("/static/art/haste/haste-thumb.webp");
+  }
+  14% {
+    --art-bg-image: url("/static/art/daft-punk/daft-punk-thumb.webp");
+  }
+  28% {
+    --art-bg-image: url("/static/art/apple/apple-thumb.webp");
+  }
+  42% {
+    --art-bg-image: url("/static/art/eye/eye-thumb.webp");
+  }
+  57% {
+    --art-bg-image: url("/static/art/f1/f1-thumb.webp");
+  }
+  71% {
+    --art-bg-image: url("/static/art/lights/lights-thumb.webp");
+  }
+  85% {
+    --art-bg-image: url("/static/art/lop/lop-thumb.webp");
+  }
+  100% {
+    --art-bg-image: url("/static/art/haste/haste-thumb.webp");
+  }
 }

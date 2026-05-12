@@ -7,14 +7,16 @@
   --color-link: #5865f2;
   --color-bg: #fff;
   --color-text: #333;
+  --color-text-rgb: 51 51 51;
+  --color-art: var(--color-text) !important;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: #181818;
     --color-text: #f3f3f3;
+    --color-text-rgb: 243 243 243;
     --color-link: #8ab4f8;
-    --color-art: #00fff2;
     --color-github: #f3f3f3;
     --color-gitlab: #ffb86c;
     --color-email: #ff7b72;
