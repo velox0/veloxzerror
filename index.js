@@ -50,7 +50,7 @@ fastify.get("/projects", (req, res) => {
 const CACHE_FILE = path.join(__dirname, "cache", "projects.json");
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
-const STARRED_REPOS = ["moonlight-server", "embed0", "creeper"];
+const STARRED_REPOS = ["moonlight-server", "kraken", "embed0", "creeper"];
 
 const MARKED_CACHE_FILE = path.join(__dirname, "cache", "marked.min.js");
 
