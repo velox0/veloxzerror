@@ -34,6 +34,177 @@
   gap: 10px;
 }
 
+.commit-ticker {
+  position: fixed;
+  right: 16px;
+  top: 0;
+  bottom: 0;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 30;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+}
+
+.commit-ticker__label {
+  display: none;
+}
+
+.commit-ticker__viewport {
+  flex: 1;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.commit-ticker__track {
+  display: flex;
+  flex-direction: column;
+  animation: ticker-up var(--ticker-duration, 60s) linear infinite;
+  will-change: transform;
+}
+
+.commit-ticker__group {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.commit-ticker__placeholder {
+  font-size: 12px;
+  opacity: 0.4;
+  padding: 8px 12px;
+  pointer-events: auto;
+}
+
+.commit-ticker__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: var(--color-text);
+  opacity: 0.45;
+  transition: opacity 0.3s ease, background 0.3s ease;
+  cursor: default;
+}
+
+.commit-ticker__item:hover {
+  opacity: 1;
+  background: rgb(var(--color-text-rgb) / 0.05);
+}
+
+.commit-ticker__viewport:hover .commit-ticker__track {
+  animation-play-state: paused;
+}
+
+.commit-ticker__link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: inherit;
+}
+
+.commit-ticker__link::before,
+.commit-ticker__actions::before,
+.commit-ticker__link::after,
+.commit-ticker__actions::after {
+  content: none;
+}
+
+.commit-ticker__repo {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  opacity: 0.55;
+}
+
+.commit-ticker__message {
+  font-size: 12px;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.commit-ticker__meta,
+.commit-ticker__actions {
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+.commit-ticker__actions {
+  color: var(--color-link);
+  margin-top: 2px;
+}
+
+@keyframes ticker-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@media (max-width: 640px) {
+  .commit-ticker {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: 45vh;
+    margin-top: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    justify-content: flex-end;
+    -webkit-mask-image: linear-gradient(
+      to top,
+      black 0%,
+      black 55%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to top,
+      black 0%,
+      black 55%,
+      transparent 100%
+    );
+  }
+
+  .commit-ticker__item {
+    opacity: 0.75;
+  }
+
+  .commit-ticker__label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    opacity: 0.4;
+    margin-bottom: 8px;
+    padding-left: 2px;
+  }
+}
+
 .art-link {
   --art-bg-image: url("/static/art/haste/haste-thumb.webp");
   background-image:

@@ -4,6 +4,9 @@ const path = require("path");
 const fs = require("fs");
 
 const PORT = process.env.PORT || 3000;
+const STARRED_REPOS = ["moonlight-server", "kraken", "cerver", "creeper"];
+const HIDDEN_REPOS = ["velox0", "veloxzerror"];
+const PINNED_REPOS = ["cerver"];
 
 // Main static files root, allows us to use reply.sendFile("index.html") which looks in "public"
 fastify.register(require("@fastify/static"), {
@@ -109,10 +112,6 @@ async function fetchAndCacheRepos() {
     throw new Error(`GitHub API ${response.status}: ${errorText}`);
   }
 
-  const STARRED_REPOS = ["moonlight-server", "kraken", "cerver", "creeper"];
-  const HIDDEN_REPOS = ["velox0", "veloxzerror"];
-  const PINNED_REPOS = ["cerver"];
-
   const repos = await response.json();
 
   const filtered = repos
@@ -135,7 +134,7 @@ async function fetchAndCacheRepos() {
       if (b.starred && !a.starred) return 1;
       return new Date(b.pushed_at) - new Date(a.pushed_at);
     })
-    .map(({ pinned, starred, ...rest }) => rest);
+    .map(({ pinned, ...rest }) => rest);
 
   const now = Date.now();
   cachedRepos = filtered;
@@ -150,6 +149,179 @@ async function fetchAndCacheRepos() {
 
   return filtered;
 }
+
+const RECENT_COMMITS_CACHE_FILE = path.join(
+  __dirname,
+  "cache",
+  "recent-commits.json",
+);
+const RECENT_COMMITS_TTL = 15 * 60 * 1000;
+
+let cachedRecentCommits = null;
+let recentCommitsCacheTime = 0;
+(function loadDiskRecentCommitsCache() {
+  try {
+    if (fs.existsSync(RECENT_COMMITS_CACHE_FILE)) {
+      const raw = fs.readFileSync(RECENT_COMMITS_CACHE_FILE, "utf8");
+      const { data, savedAt } = JSON.parse(raw);
+      cachedRecentCommits = data;
+      recentCommitsCacheTime = savedAt;
+    }
+  } catch (e) {
+    console.warn("[cache] Failed to load recent commits cache:", e.message);
+  }
+})();
+
+function buildHeaders(token) {
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "velox0-fastify",
+  };
+
+  if (token) headers.Authorization = `token ${token}`;
+  return headers;
+}
+
+function summarizeWorkflowRuns(workflowRuns) {
+  const counts = new Map();
+
+  for (const run of workflowRuns) {
+    const label = run.conclusion || run.status || "unknown";
+    counts.set(label, (counts.get(label) || 0) + 1);
+  }
+
+  return Array.from(counts.entries())
+    .map(([label, count]) => `${count} ${label}`)
+    .join(" · ");
+}
+
+async function fetchRecentCommits() {
+  const token = process.env.GITHUB_API_KEY;
+  const headers = buildHeaders(token);
+  const repos =
+    cachedRepos && Date.now() - cacheTime < CACHE_TTL
+      ? cachedRepos
+      : await fetchAndCacheRepos();
+
+  const recentCommits = await Promise.all(
+    repos.map(async (repo) => {
+      try {
+        const branch = encodeURIComponent(repo.default_branch || "main");
+        const commitsResponse = await fetch(
+          `https://api.github.com/repos/${repo.full_name}/commits?sha=${branch}&per_page=5`,
+          { headers },
+        );
+
+        if (!commitsResponse.ok) return null;
+
+        const commits = await commitsResponse.json();
+        if (!commits.length) return null;
+
+        let latestCommitActions = null;
+        try {
+          const latestCommit = commits[0];
+          const runsResponse = await fetch(
+            `https://api.github.com/repos/${repo.full_name}/actions/runs?head_sha=${latestCommit.sha}&per_page=10`,
+            { headers },
+          );
+
+          if (runsResponse.ok) {
+            const runs = await runsResponse.json();
+            if (runs.total_count > 0 && runs.workflow_runs?.length) {
+              latestCommitActions = {
+                count: runs.total_count,
+                summary: summarizeWorkflowRuns(runs.workflow_runs.slice(0, 5)),
+                url: runs.workflow_runs[0].html_url,
+              };
+            }
+          }
+        } catch (err) {
+          console.warn(
+            `[cache] Failed to fetch actions for ${repo.full_name}:`,
+            err.message,
+          );
+        }
+
+        return commits.map((commit, index) => ({
+          repo: repo.full_name,
+          repo_url: repo.html_url,
+          commit_url: commit.html_url,
+          sha: commit.sha,
+          message:
+            commit.commit?.message?.split("\n")[0] || "updated repository",
+          committed_at:
+            commit.commit?.committer?.date ||
+            commit.commit?.author?.date ||
+            repo.pushed_at,
+          actions: index === 0 ? latestCommitActions : null,
+        }));
+      } catch (err) {
+        console.warn(
+          `[cache] Failed to fetch commit for ${repo.full_name}:`,
+          err.message,
+        );
+        return null;
+      }
+    }),
+  );
+
+  return recentCommits
+    .flatMap((repoCommits) => repoCommits || [])
+    .sort((a, b) => new Date(b.committed_at) - new Date(a.committed_at));
+}
+
+fastify.get("/api/recent-commits", async (req, res) => {
+  try {
+    const now = Date.now();
+
+    if (
+      cachedRecentCommits &&
+      now - recentCommitsCacheTime < RECENT_COMMITS_TTL
+    ) {
+      if (now - recentCommitsCacheTime > 10 * 60 * 1000) {
+        fetchRecentCommits()
+          .then((data) => {
+            cachedRecentCommits = data;
+            recentCommitsCacheTime = Date.now();
+            fs.mkdirSync(path.dirname(RECENT_COMMITS_CACHE_FILE), {
+              recursive: true,
+            });
+            fs.writeFileSync(
+              RECENT_COMMITS_CACHE_FILE,
+              JSON.stringify({ data, savedAt: recentCommitsCacheTime }),
+            );
+          })
+          .catch((e) =>
+            console.warn(
+              "[cache] Background recent commits refresh failed:",
+              e.message,
+            ),
+          );
+      }
+
+      return cachedRecentCommits;
+    }
+
+    const data = await fetchRecentCommits();
+    cachedRecentCommits = data;
+    recentCommitsCacheTime = now;
+
+    fs.mkdirSync(path.dirname(RECENT_COMMITS_CACHE_FILE), { recursive: true });
+    fs.writeFileSync(
+      RECENT_COMMITS_CACHE_FILE,
+      JSON.stringify({ data, savedAt: now }),
+    );
+
+    return data;
+  } catch (err) {
+    req.log.error(`Error fetching recent commits: ${err}`);
+    if (cachedRecentCommits) {
+      console.warn("[cache] Returning stale recent commits due to fetch error");
+      return cachedRecentCommits;
+    }
+    return res.status(500).send({ error: "Internal server error" });
+  }
+});
 
 fastify.get("/api/projects", async (req, res) => {
   try {

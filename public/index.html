@@ -93,6 +93,21 @@
         </div>
       </div>
     </div>
+    <div class="commit-ticker" aria-label="Recent GitHub commits">
+      <div class="commit-ticker__label">recent commits</div>
+      <div class="commit-ticker__viewport">
+        <div class="commit-ticker__track" id="commit-ticker-track">
+          <div class="commit-ticker__group" id="commit-ticker-group">
+            <span class="commit-ticker__placeholder">loading commits...</span>
+          </div>
+          <div
+            class="commit-ticker__group"
+            aria-hidden="true"
+            id="commit-ticker-group-clone"
+          ></div>
+        </div>
+      </div>
+    </div>
     <script>
       // Crypto hover effect on name
       const header = document.getElementsByClassName("h")[0];
@@ -144,6 +159,97 @@
           name.innerText = names[0];
         }
       });
+
+      const tickerGroup = document.getElementById("commit-ticker-group");
+      const tickerGroupClone = document.getElementById(
+        "commit-ticker-group-clone",
+      );
+      const tickerTrack = document.getElementById("commit-ticker-track");
+
+      function formatCommitTime(dateString) {
+        const diff = Date.now() - new Date(dateString).getTime();
+        const minutes = Math.max(1, Math.floor(diff / 60000));
+
+        if (minutes < 60) return `${minutes}m ago`;
+
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}h ago`;
+
+        const days = Math.floor(hours / 24);
+        return `${days}d ago`;
+      }
+
+      function renderTicker(commits) {
+        const items = commits.slice(0, 25);
+
+        tickerGroup.replaceChildren();
+
+        if (!items.length) {
+          const empty = document.createElement("span");
+          empty.className = "commit-ticker__placeholder";
+          empty.textContent = "recent commits unavailable";
+          tickerGroup.appendChild(empty);
+          tickerGroupClone.innerHTML = tickerGroup.innerHTML;
+          return;
+        }
+
+        items.forEach((commit) => {
+          const item = document.createElement("div");
+          item.className = "commit-ticker__item";
+
+          const commitLink = document.createElement("a");
+          commitLink.className = "commit-ticker__link";
+          commitLink.href = commit.commit_url;
+          commitLink.target = "_blank";
+          commitLink.rel = "noopener noreferrer";
+
+          const repo = document.createElement("span");
+          repo.className = "commit-ticker__repo";
+          repo.textContent = commit.repo;
+
+          const message = document.createElement("span");
+          message.className = "commit-ticker__message";
+          message.textContent = commit.message;
+
+          const meta = document.createElement("span");
+          meta.className = "commit-ticker__meta";
+          meta.textContent = `${commit.sha.slice(0, 7)} · ${formatCommitTime(commit.committed_at)}`;
+
+          commitLink.append(repo, message, meta);
+          item.appendChild(commitLink);
+
+          if (commit.actions) {
+            const actions = document.createElement("a");
+            actions.className = "commit-ticker__actions";
+            actions.href = commit.actions.url;
+            actions.target = "_blank";
+            actions.rel = "noopener noreferrer";
+            actions.textContent = `Actions ${commit.actions.count}: ${commit.actions.summary}`;
+            item.appendChild(actions);
+          }
+
+          tickerGroup.appendChild(item);
+        });
+
+        tickerGroupClone.innerHTML = tickerGroup.innerHTML;
+
+        // Vertical: scale duration to number of items
+        const duration = Math.max(40, items.length * 6);
+        tickerTrack.style.setProperty("--ticker-duration", `${duration}s`);
+      }
+
+      async function loadRecentCommits() {
+        try {
+          const response = await fetch("/api/recent-commits");
+          if (!response.ok) throw new Error("failed to fetch recent commits");
+          const commits = await response.json();
+          renderTicker(commits);
+        } catch (error) {
+          renderTicker([]);
+        }
+      }
+
+      loadRecentCommits();
     </script>
   </body>
 </html>

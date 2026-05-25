@@ -41,7 +41,6 @@ jobs:
             cd ${{ secrets.DEPLOY_PATH }}
             git fetch origin --depth 1
             git reset --hard origin/main
-            rm cache/marked.min.js cache/projects.json || true
-            rmdir cache
+            rm -r cache || true
             npm install
             pm2 restart ${{ vars.APP_NAME }} --silent || pm2 start npm --name ${{ vars.APP_NAME }} --silent -- start
