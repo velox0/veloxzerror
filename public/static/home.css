@@ -172,7 +172,8 @@
     top: auto;
     bottom: 0;
     width: 100%;
-    height: 45vh;
+    /* max height = 100vh - main content height */
+    height: calc(100vh - 525px); 
     margin-top: 0;
     padding-bottom: env(safe-area-inset-bottom);
     justify-content: flex-end;

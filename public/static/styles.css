@@ -28,7 +28,7 @@ html {
   font-family:
     "Fira Mono", "JetBrains Mono", "Menlo", "Consolas", "Liberation Mono",
     "Courier New", Courier;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -37,7 +37,7 @@ body {
   padding-bottom: 20px;
   color: var(--color-text);
   background-color: var(--color-bg);
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #app {
