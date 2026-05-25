@@ -97,13 +97,18 @@
       <div class="commit-ticker__label">recent commits</div>
       <div class="commit-ticker__viewport">
         <div class="commit-ticker__track" id="commit-ticker-track">
+          <div
+            class="commit-ticker__group"
+            aria-hidden="true"
+            id="commit-ticker-group-clone-before"
+          ></div>
           <div class="commit-ticker__group" id="commit-ticker-group">
             <span class="commit-ticker__placeholder">loading commits...</span>
           </div>
           <div
             class="commit-ticker__group"
             aria-hidden="true"
-            id="commit-ticker-group-clone"
+            id="commit-ticker-group-clone-after"
           ></div>
         </div>
       </div>
@@ -161,10 +166,18 @@
       });
 
       const tickerGroup = document.getElementById("commit-ticker-group");
-      const tickerGroupClone = document.getElementById(
-        "commit-ticker-group-clone",
+      const tickerGroupCloneBefore = document.getElementById(
+        "commit-ticker-group-clone-before",
+      );
+      const tickerGroupCloneAfter = document.getElementById(
+        "commit-ticker-group-clone-after",
       );
       const tickerTrack = document.getElementById("commit-ticker-track");
+      const tickerViewport = document.querySelector(".commit-ticker__viewport");
+
+      let autoScrollReq = null;
+      let scrollTimeout = null;
+      let isTickerTouching = false;
 
       function formatCommitTime(dateString) {
         const diff = Date.now() - new Date(dateString).getTime();
@@ -189,7 +202,8 @@
           empty.className = "commit-ticker__placeholder";
           empty.textContent = "recent commits unavailable";
           tickerGroup.appendChild(empty);
-          tickerGroupClone.innerHTML = tickerGroup.innerHTML;
+          tickerGroupCloneBefore.innerHTML = tickerGroup.innerHTML;
+          tickerGroupCloneAfter.innerHTML = tickerGroup.innerHTML;
           return;
         }
 
@@ -231,11 +245,55 @@
           tickerGroup.appendChild(item);
         });
 
-        tickerGroupClone.innerHTML = tickerGroup.innerHTML;
+        tickerGroupCloneBefore.innerHTML = tickerGroup.innerHTML;
+        tickerGroupCloneAfter.innerHTML = tickerGroup.innerHTML;
 
         // Vertical: scale duration to number of items
         const duration = Math.max(40, items.length * 6);
         tickerTrack.style.setProperty("--ticker-duration", `${duration}s`);
+
+        // Mobile JS Auto-Scroll Logic
+        if (window.innerWidth <= 640 && tickerViewport.scrollTop === 0) {
+          tickerViewport.scrollTop = tickerGroup.offsetHeight;
+        }
+
+        function autoScroll() {
+          if (window.innerWidth <= 640 && !isTickerTouching) {
+            tickerViewport.scrollTop += 0.5;
+            if (tickerViewport.scrollTop >= tickerGroup.offsetHeight * 2) {
+              tickerViewport.scrollTop -= tickerGroup.offsetHeight;
+            }
+          }
+          autoScrollReq = requestAnimationFrame(autoScroll);
+        }
+
+        if (autoScrollReq) cancelAnimationFrame(autoScrollReq);
+        autoScrollReq = requestAnimationFrame(autoScroll);
+
+        tickerViewport.ontouchstart = () => { isTickerTouching = true; };
+        tickerViewport.ontouchend = () => {
+          isTickerTouching = false;
+          resetScrollTimeout();
+        };
+
+        function resetScrollTimeout() {
+          clearTimeout(scrollTimeout);
+          isTickerTouching = true;
+          scrollTimeout = setTimeout(() => {
+            isTickerTouching = false;
+          }, 50);
+        }
+
+        tickerViewport.onscroll = () => {
+          if (window.innerWidth <= 640) {
+            resetScrollTimeout();
+            if (tickerViewport.scrollTop >= tickerGroup.offsetHeight * 2 && tickerGroup.offsetHeight > 0) {
+              tickerViewport.scrollTop -= tickerGroup.offsetHeight;
+            } else if (tickerViewport.scrollTop <= 0 && tickerGroup.offsetHeight > 0) {
+              tickerViewport.scrollTop += tickerGroup.offsetHeight;
+            }
+          }
+        };
       }
 
       async function loadRecentCommits() {
