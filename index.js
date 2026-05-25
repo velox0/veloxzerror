@@ -1,5 +1,5 @@
 require("dotenv").config();
-const fastify = require("fastify")({logger: false});
+const fastify = require("fastify")({ logger: false });
 const path = require("path");
 const fs = require("fs");
 
@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 // Main static files root, allows us to use reply.sendFile("index.html") which looks in "public"
 fastify.register(require("@fastify/static"), {
   root: path.join(__dirname, "public"),
-  prefix: "/public_hidden/", // just to avoid namespace clash
+  serve: false,
   decorateReply: true,
 });
 
@@ -50,8 +50,6 @@ fastify.get("/projects", (req, res) => {
 const CACHE_FILE = path.join(__dirname, "cache", "projects.json");
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
-const STARRED_REPOS = ["moonlight-server", "kraken", "embed0", "creeper"];
-
 const MARKED_CACHE_FILE = path.join(__dirname, "cache", "marked.min.js");
 
 // Pre-fetch marked.js on startup
@@ -59,7 +57,9 @@ const MARKED_CACHE_FILE = path.join(__dirname, "cache", "marked.min.js");
   try {
     if (!fs.existsSync(MARKED_CACHE_FILE)) {
       console.log("[cache] Fetching marked.js from CDN...");
-      const res = await fetch("https://cdn.jsdelivr.net/npm/marked/marked.min.js");
+      const res = await fetch(
+        "https://cdn.jsdelivr.net/npm/marked/marked.min.js",
+      );
       if (res.ok) {
         const text = await res.text();
         fs.mkdirSync(path.dirname(MARKED_CACHE_FILE), { recursive: true });
@@ -82,7 +82,9 @@ let cacheTime = 0;
       const { data, savedAt } = JSON.parse(raw);
       cachedRepos = data;
       cacheTime = savedAt;
-      console.log(`[cache] Loaded ${data.length} repos from disk (age: ${Math.round((Date.now() - savedAt) / 1000)}s)`);
+      console.log(
+        `[cache] Loaded ${data.length} repos from disk (age: ${Math.round((Date.now() - savedAt) / 1000)}s)`,
+      );
     }
   } catch (e) {
     console.warn("[cache] Failed to load disk cache:", e.message);
@@ -107,10 +109,14 @@ async function fetchAndCacheRepos() {
     throw new Error(`GitHub API ${response.status}: ${errorText}`);
   }
 
+  const STARRED_REPOS = ["moonlight-server", "kraken", "cerver", "creeper"];
+  const HIDDEN_REPOS = ["velox0", "veloxzerror"];
+  const PINNED_REPOS = ["cerver"];
+
   const repos = await response.json();
 
   const filtered = repos
-    .filter((r) => r.name !== r.owner.login)
+    .filter((r) => r.name !== r.owner.login && !HIDDEN_REPOS.includes(r.name))
     .map((r) => ({
       full_name: r.full_name,
       html_url: r.html_url,
@@ -120,7 +126,16 @@ async function fetchAndCacheRepos() {
       pushed_at: r.pushed_at,
       default_branch: r.default_branch,
       starred: STARRED_REPOS.includes(r.name),
-    }));
+      pinned: PINNED_REPOS.includes(r.name),
+    }))
+    .sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (b.pinned && !a.pinned) return 1;
+      if (a.starred && !b.starred) return -1;
+      if (b.starred && !a.starred) return 1;
+      return new Date(b.pushed_at) - new Date(a.pushed_at);
+    })
+    .map(({ pinned, starred, ...rest }) => rest);
 
   const now = Date.now();
   cachedRepos = filtered;
@@ -128,7 +143,10 @@ async function fetchAndCacheRepos() {
 
   // Persist to disk (non-blocking)
   fs.mkdirSync(path.dirname(CACHE_FILE), { recursive: true });
-  fs.writeFileSync(CACHE_FILE, JSON.stringify({ data: filtered, savedAt: now }));
+  fs.writeFileSync(
+    CACHE_FILE,
+    JSON.stringify({ data: filtered, savedAt: now }),
+  );
 
   return filtered;
 }
@@ -140,7 +158,9 @@ fastify.get("/api/projects", async (req, res) => {
     if (cachedRepos && now - cacheTime < CACHE_TTL) {
       // Stale-while-revalidate: if cache is >20 min old, refresh in background
       if (now - cacheTime > 20 * 60 * 1000) {
-        fetchAndCacheRepos().catch((e) => console.warn("[cache] Background refresh failed:", e.message));
+        fetchAndCacheRepos().catch((e) =>
+          console.warn("[cache] Background refresh failed:", e.message),
+        );
       }
       return cachedRepos;
     }
@@ -181,7 +201,7 @@ fastify.setNotFoundHandler((req, res) => {
 
 const start = async () => {
   try {
-    await fastify.listen({port: PORT, host: "0.0.0.0"});
+    await fastify.listen({ port: PORT, host: "0.0.0.0" });
     console.log(`Server is running on http://localhost:${PORT}`);
   } catch (err) {
     fastify.log.error(err);
