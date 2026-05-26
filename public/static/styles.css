@@ -28,7 +28,6 @@ html {
   font-family:
     "Fira Mono", "JetBrains Mono", "Menlo", "Consolas", "Liberation Mono",
     "Courier New", Courier;
-  overflow: hidden;
 }
 
 body {
@@ -37,36 +36,12 @@ body {
   padding-bottom: 20px;
   color: var(--color-text);
   background-color: var(--color-bg);
-  overflow: hidden;
 }
 
 #app {
   display: flex;
   flex-direction: column;
   width: fit-content;
-  position: relative;
-  z-index: 40;
-}
-
-#app::before {
-  content: "";
-  position: absolute;
-  inset: -60px -80px;
-  background: color-mix(in srgb, var(--color-bg) 40%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: -1;
-  pointer-events: none;
-  -webkit-mask-image: radial-gradient(
-    ellipse at center,
-    black 30%,
-    transparent 70%
-  );
-  mask-image: radial-gradient(
-    ellipse at center,
-    black 30%,
-    transparent 70%
-  );
 }
 
 .h {

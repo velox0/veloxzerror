@@ -160,6 +160,7 @@
     position: sticky;
     top: 40px;
     flex: 1; /* Naturally fills all remaining flex space */
+    min-width: 0; /* CRITICAL: Allows flex child to shrink so word wrap can actually trigger */
     height: calc(100vh - 80px);
   }
 
@@ -213,6 +214,8 @@
     font-size: 14px;
     border-radius: 4px;
     border: 1px solid var(--card-border);
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
   #readme-pane code {
