@@ -95,14 +95,18 @@
 .commit-ticker__viewport {
   flex: 1;
   pointer-events: auto;
-  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.commit-ticker__viewport::-webkit-scrollbar {
+  display: none;
 }
 
 .commit-ticker__track {
   display: flex;
   flex-direction: column;
-  animation: ticker-up var(--ticker-duration, 60s) linear infinite;
-  will-change: transform;
 }
 
 .commit-ticker__group {
@@ -137,9 +141,7 @@
   background: rgb(var(--color-text-rgb) / 0.05);
 }
 
-.commit-ticker__viewport:hover .commit-ticker__track {
-  animation-play-state: paused;
-}
+
 
 .commit-ticker__link {
   display: flex;
@@ -182,15 +184,6 @@
   margin-top: 2px;
 }
 
-@keyframes ticker-up {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-33.333333%);
-  }
-}
-
 @media (max-width: 640px) {
   .commit-ticker {
     position: fixed;
@@ -215,20 +208,6 @@
       black 30%,
       transparent 100%
     );
-  }
-
-  .commit-ticker__viewport {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .commit-ticker__viewport::-webkit-scrollbar {
-    display: none;
-  }
-
-  .commit-ticker__track {
-    animation: none;
   }
 
   .commit-ticker__item {

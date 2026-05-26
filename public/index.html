@@ -178,6 +178,12 @@
       let autoScrollReq = null;
       let scrollTimeout = null;
       let isTickerTouching = false;
+      let isTickerHovered = false;
+      let isInteracting = false;
+      let isResettingScroll = false;
+      let currentY = 0;
+      let lastTime = null;
+      let currentSpeed = 0;
 
       function formatCommitTime(dateString) {
         const diff = Date.now() - new Date(dateString).getTime();
@@ -248,49 +254,116 @@
         tickerGroupCloneBefore.innerHTML = tickerGroup.innerHTML;
         tickerGroupCloneAfter.innerHTML = tickerGroup.innerHTML;
 
-        // Vertical: scale duration to number of items
-        const duration = Math.max(40, items.length * 6);
-        tickerTrack.style.setProperty("--ticker-duration", `${duration}s`);
-
-        // Mobile JS Auto-Scroll Logic
-        if (window.innerWidth <= 640 && tickerViewport.scrollTop === 0) {
-          tickerViewport.scrollTop = tickerGroup.offsetHeight;
+        const limit = tickerGroup.offsetHeight;
+        if (limit > 0) {
+          currentY = limit;
+          tickerTrack.style.transform = `translate3d(0, ${-currentY}px, 0)`;
         }
+        tickerViewport.scrollTop = 0;
+        currentSpeed = 0;
 
-        function autoScroll() {
-          if (window.innerWidth <= 640 && !isTickerTouching) {
-            tickerViewport.scrollTop += 0.5;
-            if (tickerViewport.scrollTop >= tickerGroup.offsetHeight * 2) {
-              tickerViewport.scrollTop -= tickerGroup.offsetHeight;
+        function autoScroll(timestamp) {
+          if (!lastTime) lastTime = timestamp;
+          const deltaTime = timestamp - lastTime;
+          lastTime = timestamp;
+
+          // Cap deltaTime to avoid huge jumps when the tab is hidden
+          const dt = Math.min(deltaTime, 100) / 1000;
+          if (!isInteracting) {
+            const targetSpeed = isTickerHovered ? 0 : 60; // 60 pixels per second (doubled original speed)
+            
+            if (currentSpeed < targetSpeed) {
+              const acceleration = 30; // 30 px/s^2 (takes 2 seconds to reach 60px/s)
+              currentSpeed = Math.min(targetSpeed, currentSpeed + acceleration * dt);
+            } else if (currentSpeed > targetSpeed) {
+              const deceleration = 80; // 80 px/s^2 (takes 0.75 seconds to ease out from 60px/s to 0)
+              currentSpeed = Math.max(targetSpeed, currentSpeed - deceleration * dt);
             }
+
+            if (currentSpeed > 0) {
+              currentY += currentSpeed * dt;
+
+              if (limit > 0) {
+                if (currentY >= limit * 2) {
+                  currentY -= limit;
+                }
+              }
+              tickerTrack.style.transform = `translate3d(0, ${-currentY}px, 0)`;
+            }
+          } else {
+            currentSpeed = 0; // Reset speed when interacting (touch/scroll)
           }
           autoScrollReq = requestAnimationFrame(autoScroll);
         }
 
         if (autoScrollReq) cancelAnimationFrame(autoScrollReq);
+        lastTime = null;
         autoScrollReq = requestAnimationFrame(autoScroll);
 
-        tickerViewport.ontouchstart = () => { isTickerTouching = true; };
+        tickerViewport.ontouchstart = () => {
+          isTickerTouching = true;
+          startInteraction();
+        };
         tickerViewport.ontouchend = () => {
           isTickerTouching = false;
           resetScrollTimeout();
         };
+        tickerViewport.onmouseenter = () => { isTickerHovered = true; };
+        tickerViewport.onmouseleave = () => { isTickerHovered = false; };
+        tickerViewport.onwheel = () => { startInteraction(); };
+
+        function startInteraction() {
+          if (!isInteracting) {
+            isInteracting = true;
+            if (limit > 0) {
+              currentY = (currentY % limit) + limit;
+            }
+            tickerViewport.scrollTop = currentY;
+            tickerTrack.style.transform = 'translate3d(0, 0, 0)';
+          }
+          resetScrollTimeout();
+        }
 
         function resetScrollTimeout() {
           clearTimeout(scrollTimeout);
-          isTickerTouching = true;
           scrollTimeout = setTimeout(() => {
-            isTickerTouching = false;
-          }, 50);
+            if (limit > 0) {
+              currentY = (tickerViewport.scrollTop % limit) + limit;
+            } else {
+              currentY = tickerViewport.scrollTop;
+            }
+            
+            isResettingScroll = true;
+            tickerViewport.scrollTop = 0;
+            tickerTrack.style.transform = `translate3d(0, ${-currentY}px, 0)`;
+            
+            isInteracting = false;
+            
+            setTimeout(() => {
+              isResettingScroll = false;
+            }, 50);
+          }, 150);
         }
 
         tickerViewport.onscroll = () => {
-          if (window.innerWidth <= 640) {
-            resetScrollTimeout();
-            if (tickerViewport.scrollTop >= tickerGroup.offsetHeight * 2 && tickerGroup.offsetHeight > 0) {
-              tickerViewport.scrollTop -= tickerGroup.offsetHeight;
-            } else if (tickerViewport.scrollTop <= 0 && tickerGroup.offsetHeight > 0) {
-              tickerViewport.scrollTop += tickerGroup.offsetHeight;
+          if (isResettingScroll) return;
+          
+          if (!isInteracting) {
+            startInteraction();
+            return;
+          }
+          
+          resetScrollTimeout();
+          
+          if (limit > 0) {
+            if (tickerViewport.scrollTop >= limit * 2) {
+              isResettingScroll = true;
+              tickerViewport.scrollTop -= limit;
+              setTimeout(() => { isResettingScroll = false; }, 0);
+            } else if (tickerViewport.scrollTop <= limit / 2) {
+              isResettingScroll = true;
+              tickerViewport.scrollTop += limit;
+              setTimeout(() => { isResettingScroll = false; }, 0);
             }
           }
         };
