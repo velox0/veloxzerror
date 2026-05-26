@@ -242,11 +242,20 @@
   animation: bgSwitch 4s infinite step-end;
 }
 
+.art-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .art-note {
+  position: absolute;
+  left: 140px;
+  white-space: nowrap;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
   font-size: 14px;
-  margin-left: 12px;
   color: var(--color-text);
 }
 
