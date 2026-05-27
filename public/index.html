@@ -199,7 +199,7 @@
       }
 
       function renderTicker(commits) {
-        const items = commits.slice(0, 25);
+        const items = commits.slice(0, 50);
 
         tickerGroup.replaceChildren();
 
@@ -254,6 +254,10 @@
         tickerGroupCloneBefore.innerHTML = tickerGroup.innerHTML;
         tickerGroupCloneAfter.innerHTML = tickerGroup.innerHTML;
 
+        initTickerScrolling();
+      }
+
+      function initTickerScrolling() {
         const limit = tickerGroup.offsetHeight;
         if (limit > 0) {
           currentY = limit;
@@ -378,6 +382,11 @@
         } catch (error) {
           renderTicker([]);
         }
+      }
+
+      // Check if server already hydrated commits
+      if (tickerGroup.querySelector(".commit-ticker__item")) {
+        initTickerScrolling();
       }
 
       loadRecentCommits();

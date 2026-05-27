@@ -257,10 +257,12 @@
 
           renderProjects(repos, container);
         } catch (err) {
-          container.innerHTML =
-            '<div style="opacity: 0.5; padding: 20px 40px; color: red;">failed to load projects: ' +
-            err.message +
-            "</div>";
+          if (!container.querySelector(".project-card")) {
+            container.innerHTML =
+              '<div style="opacity: 0.5; padding: 20px 40px; color: red;">failed to load projects: ' +
+              err.message +
+              "</div>";
+          }
         }
       }
 

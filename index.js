@@ -27,8 +27,39 @@ fastify.get("/favicon.ico", (req, res) => {
   return res.sendFile("favicon.ico");
 });
 
-fastify.get("/", (req, res) => {
-  return res.sendFile("index.html");
+fastify.get("/", async (req, res) => {
+  const cachePath = path.join(__dirname, "cache", "index.html");
+  const now = Date.now();
+  const isCacheFresh =
+    cachedRecentCommits && now - recentCommitsCacheTime < RECENT_COMMITS_TTL;
+
+  if (isCacheFresh && fs.existsSync(cachePath)) {
+    res.header("Content-Type", "text/html; charset=utf-8");
+    return res.send(fs.readFileSync(cachePath));
+  } else {
+    if (!isCacheFresh) {
+      fetchRecentCommits()
+        .then((data) => {
+          cachedRecentCommits = data;
+          recentCommitsCacheTime = Date.now();
+          fs.mkdirSync(path.dirname(RECENT_COMMITS_CACHE_FILE), {
+            recursive: true,
+          });
+          fs.writeFileSync(
+            RECENT_COMMITS_CACHE_FILE,
+            JSON.stringify({ data, savedAt: recentCommitsCacheTime }),
+          );
+          buildHydratedIndex();
+        })
+        .catch((e) =>
+          console.warn(
+            "[cache] Background recent commits refresh failed:",
+            e.message,
+          ),
+        );
+    }
+    return res.sendFile("index.html");
+  }
 });
 
 fastify.get("/art", (req, res) => {
@@ -45,15 +76,185 @@ fastify.get("/art/:key", (req, res) => {
   return res.sendFile(`art/${key}.html`);
 });
 
-fastify.get("/projects", (req, res) => {
-  return res.sendFile("projects.html");
+fastify.get("/projects", async (req, res) => {
+  const cachePath = path.join(__dirname, "cache", "projects.html");
+  const now = Date.now();
+  const isCacheFresh = cachedRepos && now - cacheTime < CACHE_TTL;
+
+  if (isCacheFresh && fs.existsSync(cachePath)) {
+    res.header("Content-Type", "text/html; charset=utf-8");
+    return res.send(fs.readFileSync(cachePath));
+  } else {
+    if (!isCacheFresh) {
+      fetchAndCacheRepos()
+        .then(() => buildHydratedProjects())
+        .catch((e) =>
+          console.warn("[cache] Background refresh failed:", e.message),
+        );
+    }
+    return res.sendFile("projects.html");
+  }
 });
 
 // GitHub API proxy — disk-persisted cache survives restarts
 const CACHE_FILE = path.join(__dirname, "cache", "projects.json");
 const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
+const RECENT_COMMITS_CACHE_FILE = path.join(
+  __dirname,
+  "cache",
+  "recent-commits.json",
+);
+const RECENT_COMMITS_TTL = 15 * 60 * 1000;
+
+let cachedRepos = null;
+let cacheTime = 0;
+let cachedRecentCommits = null;
+let recentCommitsCacheTime = 0;
+
 const MARKED_CACHE_FILE = path.join(__dirname, "cache", "marked.min.js");
+
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  const s = String(str);
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatCommitTime(dateString) {
+  const diff = Date.now() - new Date(dateString).getTime();
+  const minutes = Math.max(1, Math.floor(diff / 60000));
+
+  if (minutes < 60) return `${minutes}m ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+function timeAgo(dateStr) {
+  const now = new Date();
+  const date = new Date(dateStr);
+  const seconds = Math.floor((now - date) / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (years > 0) return years === 1 ? "1 year ago" : years + " years ago";
+  if (months > 0)
+    return months === 1 ? "1 month ago" : months + " months ago";
+  if (weeks > 0) return weeks === 1 ? "1 week ago" : weeks + " weeks ago";
+  if (days > 0) return days === 1 ? "1 day ago" : days + " days ago";
+  if (hours > 0) return hours === 1 ? "1 hour ago" : hours + " hours ago";
+  if (minutes > 0)
+    return minutes === 1 ? "1 minute ago" : minutes + " minutes ago";
+  return "just now";
+}
+
+function buildHydratedIndex() {
+  try {
+    const templatePath = path.join(__dirname, "public", "index.html");
+    if (!fs.existsSync(templatePath)) return;
+    let html = fs.readFileSync(templatePath, "utf8");
+
+    if (!cachedRecentCommits || !cachedRecentCommits.length) {
+      return;
+    }
+
+    const items = cachedRecentCommits.slice(0, 50);
+    const itemsHtml = items
+      .map((commit) => {
+        let actionsHtml = "";
+        if (commit.actions) {
+          actionsHtml = `<a class="commit-ticker__actions" href="${escapeHtml(commit.actions.url)}" target="_blank" rel="noopener noreferrer">Actions ${escapeHtml(commit.actions.count)}: ${escapeHtml(commit.actions.summary)}</a>`;
+        }
+        return `<div class="commit-ticker__item"><a class="commit-ticker__link" href="${escapeHtml(commit.commit_url)}" target="_blank" rel="noopener noreferrer"><span class="commit-ticker__repo">${escapeHtml(commit.repo)}</span><span class="commit-ticker__message">${escapeHtml(commit.message)}</span><span class="commit-ticker__meta">${escapeHtml(commit.sha.slice(0, 7))} · ${escapeHtml(formatCommitTime(commit.committed_at))}</span></a>${actionsHtml}</div>`;
+      })
+      .join("");
+
+    html = html.replace(
+      /<div\s+class="commit-ticker__group"\s+aria-hidden="true"\s+id="commit-ticker-group-clone-before"\s*>\s*<\/div>/i,
+      `<div class="commit-ticker__group" aria-hidden="true" id="commit-ticker-group-clone-before">${itemsHtml}</div>`,
+    );
+
+    html = html.replace(
+      /<div\s+class="commit-ticker__group"\s+id="commit-ticker-group"\s*>\s*<span\s+class="commit-ticker__placeholder"\s*>loading commits...<\/span>\s*<\/div>/i,
+      `<div class="commit-ticker__group" id="commit-ticker-group">${itemsHtml}</div>`,
+    );
+
+    html = html.replace(
+      /<div\s+class="commit-ticker__group"\s+aria-hidden="true"\s+id="commit-ticker-group-clone-after"\s*>\s*<\/div>/i,
+      `<div class="commit-ticker__group" aria-hidden="true" id="commit-ticker-group-clone-after">${itemsHtml}</div>`,
+    );
+
+    const destPath = path.join(__dirname, "cache", "index.html");
+    fs.mkdirSync(path.dirname(destPath), { recursive: true });
+    fs.writeFileSync(destPath, html, "utf8");
+    console.log("[cache] Rebuilt hydrated index.html");
+  } catch (err) {
+    console.error("[cache] Failed to build hydrated index.html:", err.message);
+  }
+}
+
+function buildHydratedProjects() {
+  try {
+    const templatePath = path.join(__dirname, "public", "projects.html");
+    if (!fs.existsSync(templatePath)) return;
+    let html = fs.readFileSync(templatePath, "utf8");
+
+    if (!cachedRepos || !cachedRepos.length) {
+      return;
+    }
+
+    const repos = cachedRepos
+      .slice()
+      .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+    const projectsHtml = repos
+      .map((repo) => {
+        const isStarred = repo.starred;
+        const cardClass = "project-card" + (isStarred ? " starred" : "");
+        let card = `<a href="${escapeHtml(repo.html_url)}" class="nostyle" onmouseenter="showReadme('${escapeHtml(repo.full_name)}', '${escapeHtml(repo.default_branch || "main")}')"><div class="${cardClass}">`;
+        card += `<div class="project-card-name">{ ${escapeHtml(repo.full_name)}</div><hr />`;
+        if (repo.homepage) {
+          card += `<a class="" style="font-size:12px; line-height: 32px;" href="${escapeHtml(repo.homepage)}">[${escapeHtml(repo.homepage)}]</a>`;
+        }
+        if (repo.description) {
+          card += `<div class="project-card-description" style="font-size: 12px; color: var(--color-text);">${escapeHtml(repo.description)}</div>`;
+        }
+        card += `<span style="color:var(--color-text); font-size: small; opacity: 0.7;">last pushed: ${timeAgo(repo.pushed_at)}</span><br />`;
+        if (repo.language) {
+          card += `<span class="project-card-language" style="font-size: 12px;">${escapeHtml(repo.language)}</span>`;
+        }
+        card += `\n            }</div></a>`;
+        return card;
+      })
+      .join("");
+
+    html = html.replace(
+      /(<div\s+class="projects-container"\s+id="projects-container"[^>]*>\s*)<div\s+style="opacity:\s*0\.5;\s*padding:\s*20px\s+40px"\s*>loading projects...<\/div>(\s*<\/div>)/i,
+      `$1${projectsHtml}$2`,
+    );
+
+    const destPath = path.join(__dirname, "cache", "projects.html");
+    fs.mkdirSync(path.dirname(destPath), { recursive: true });
+    fs.writeFileSync(destPath, html, "utf8");
+    console.log("[cache] Rebuilt hydrated projects.html");
+  } catch (err) {
+    console.error(
+      "[cache] Failed to build hydrated projects.html:",
+      err.message,
+    );
+  }
+}
 
 // Pre-fetch marked.js on startup
 (async function initMarkedCache() {
@@ -76,8 +277,6 @@ const MARKED_CACHE_FILE = path.join(__dirname, "cache", "marked.min.js");
 })();
 
 // Load cache from disk on startup so the first request is never cold
-let cachedRepos = null;
-let cacheTime = 0;
 (function loadDiskCache() {
   try {
     if (fs.existsSync(CACHE_FILE)) {
@@ -88,6 +287,7 @@ let cacheTime = 0;
       console.log(
         `[cache] Loaded ${data.length} repos from disk (age: ${Math.round((Date.now() - savedAt) / 1000)}s)`,
       );
+      buildHydratedProjects();
     }
   } catch (e) {
     console.warn("[cache] Failed to load disk cache:", e.message);
@@ -147,18 +347,11 @@ async function fetchAndCacheRepos() {
     JSON.stringify({ data: filtered, savedAt: now }),
   );
 
+  buildHydratedProjects();
+
   return filtered;
 }
 
-const RECENT_COMMITS_CACHE_FILE = path.join(
-  __dirname,
-  "cache",
-  "recent-commits.json",
-);
-const RECENT_COMMITS_TTL = 15 * 60 * 1000;
-
-let cachedRecentCommits = null;
-let recentCommitsCacheTime = 0;
 (function loadDiskRecentCommitsCache() {
   try {
     if (fs.existsSync(RECENT_COMMITS_CACHE_FILE)) {
@@ -166,6 +359,7 @@ let recentCommitsCacheTime = 0;
       const { data, savedAt } = JSON.parse(raw);
       cachedRecentCommits = data;
       recentCommitsCacheTime = savedAt;
+      buildHydratedIndex();
     }
   } catch (e) {
     console.warn("[cache] Failed to load recent commits cache:", e.message);
@@ -290,6 +484,7 @@ fastify.get("/api/recent-commits", async (req, res) => {
               RECENT_COMMITS_CACHE_FILE,
               JSON.stringify({ data, savedAt: recentCommitsCacheTime }),
             );
+            buildHydratedIndex();
           })
           .catch((e) =>
             console.warn(
@@ -311,6 +506,7 @@ fastify.get("/api/recent-commits", async (req, res) => {
       RECENT_COMMITS_CACHE_FILE,
       JSON.stringify({ data, savedAt: now }),
     );
+    buildHydratedIndex();
 
     return data;
   } catch (err) {

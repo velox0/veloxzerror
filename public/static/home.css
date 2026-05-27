@@ -237,6 +237,7 @@
   background-position: center;
   background-repeat: no-repeat;
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent !important;
   -webkit-text-stroke: 0.1px var(--color-text);
   animation: bgSwitch 4s infinite step-end;
