@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [main, master]
+    branches: [prod]
   workflow_dispatch:
 
 env:
@@ -10,6 +10,7 @@ env:
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/prod'
     runs-on: ubuntu-latest
 
     steps:
@@ -39,8 +40,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
-            git fetch origin --depth 1
-            git reset --hard origin/main
+            git fetch origin +refs/heads/prod:refs/remotes/origin/prod --depth 1
+            git reset --hard origin/prod
             rm -r cache || true
             npm install
             pm2 restart ${{ vars.APP_NAME }} --silent || pm2 start npm --name ${{ vars.APP_NAME }} --silent -- start
