@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" data-theme="paper">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ayush Tiwari — Resume</title>
+    <meta name="description" content="Ayush Tiwari's resume: backend engineering, distributed systems, projects, and recent public GitHub commits." />
+    <link rel="canonical" href="https://velox0.com/resume" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preload" href="/static/fonts/NimbusRoman-Regular.otf" as="font" type="font/otf" crossorigin />
+    <link rel="stylesheet" href="/static/resume.css" />
+    <script src="/static/resume.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#resume">Skip to resume</a>
+    <div class="reading-progress" aria-hidden="true"><span id="reading-progress"></span></div>
+    <header class="toolbar no-print">
+      <a class="home-link" href="/">← Home</a>
+      <span class="toolbar-caption">A resume, with a little more life.</span>
+      <div class="toolbar-actions">
+        <button type="button" id="theme-toggle" aria-pressed="false" title="Toggle dark theme">Dark mode</button>
+        <button type="button" id="print-resume">Print</button>
+        <a class="download-link" href="/static/resume/ayush-tiwari.pdf" download="Ayush-Tiwari-Resume.pdf">Download PDF <span aria-hidden="true">↓</span></a>
+      </div>
+    </header>
+
+    <nav class="section-nav no-print" aria-label="Resume sections">
+      <span class="nav-caption">ON THIS PAGE</span>
+      <a href="#education">Education</a>
+      <a href="#summary">Summary</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#activity">GitHub activity</a>
+      <a class="back-top" href="#top">Back to top ↑</a>
+    </nav>
+
+    <main id="resume" class="resume">
+      <header class="resume-header" id="top">
+        <h1>Ayush Tiwari</h1>
+        <div class="contact-line">
+          <span>Delhi, India</span>
+          <a class="phone-link" href="tel:+919305470190">+91 93054 70190</a>
+          <a href="mailto:veloxzerror@gmail.com">veloxzerror@gmail.com</a>
+          <a href="https://velox0.com">velox0.com</a>
+        </div>
+      </header>
+
+      <section id="education" aria-labelledby="education-heading">
+        <h2 id="education-heading">Education</h2>
+        <div class="education-row"><span><strong>City Montessori School</strong>, Lucknow — Class XII</span><span>2022</span></div>
+        <div class="education-row"><span><strong>SRM University Delhi-NCR, Sonepat</strong>, B.Tech in Computer Science Engineering</span><span>2023 – 2027</span></div>
+      </section>
+
+      <section id="summary" aria-labelledby="summary-heading">
+        <h2 id="summary-heading">Summary</h2>
+        <p class="summary-text">Backend engineer specializing in distributed systems, high-concurrency services, and real-time architectures. Experienced in building fault-tolerant systems, scalable APIs, and network-driven applications using Go. Focused on low-latency infrastructure, observability, and resilient backend design.</p>
+      </section>
+
+      <section id="skills" aria-labelledby="skills-heading">
+        <div class="section-heading"><h2 id="skills-heading">Technical skills</h2><span class="section-note no-print">Select a skill to explore projects</span></div>
+        <dl class="skills-grid">
+          <dt>Languages</dt><dd><button data-skill="Go">Go</button>, <button data-skill="C">C</button>, <button data-skill="C++">C++</button>, <button data-skill="TypeScript">TypeScript</button>, <button data-skill="Python">Python</button>, <button data-skill="Bash">Bash</button></dd>
+          <dt>Backend</dt><dd><button data-skill="Fastify">Fastify</button>, <button data-skill="Express">Express</button>, <button data-skill="REST APIs">REST APIs</button>, <button data-skill="WebSockets">WebSockets</button></dd>
+          <dt>Infrastructure</dt><dd><button data-skill="Docker">Docker</button>, <button data-skill="Kubernetes">Kubernetes</button>, <button data-skill="AWS">AWS</button>, <button data-skill="Terraform">Terraform</button>, <button data-skill="GitHub Actions">GitHub Actions</button>, <button data-skill="Nginx">Nginx</button></dd>
+          <dt>Observability</dt><dd><button data-skill="Grafana">Grafana</button>, <button data-skill="Loki">Loki</button>, <button data-skill="Prometheus">Prometheus</button></dd>
+          <dt>Databases</dt><dd><button data-skill="PostgreSQL">PostgreSQL</button>, <button data-skill="Redis">Redis</button>, <button data-skill="MongoDB">MongoDB</button></dd>
+          <dt>Systems</dt><dd><button data-skill="Linux">Linux</button>, <button data-skill="Distributed Systems">Distributed Systems</button>, <button data-skill="TCP/UDP">TCP/UDP</button>, <button data-skill="Microservices">Microservices</button></dd>
+        </dl>
+      </section>
+
+      <section id="projects" aria-labelledby="projects-heading">
+        <div class="section-heading"><h2 id="projects-heading">Key projects</h2><button id="toggle-projects" class="text-button no-print" type="button">Collapse all</button></div>
+        <div class="project-controls no-print">
+          <label class="search-field"><span class="sr-only">Search projects</span><span aria-hidden="true">⌕</span><input id="project-search" type="search" placeholder="Find a project or technology…" /></label>
+          <label class="sort-field">Sort <select id="project-sort"><option value="featured">Resume order</option><option value="name">Name A–Z</option><option value="activity">Latest commit</option><option value="commits">Most loaded commits</option></select></label>
+        </div>
+        <div class="filter-feedback no-print" id="project-feedback" hidden><span id="project-count" role="status"></span><button id="clear-projects" type="button" class="text-button">Clear filters ×</button></div>
+        <div id="project-list">
+          <article class="project" data-repo="velox0/cerver" data-skills="C,JavaScript,Compiler,GitHub Actions,Linux">
+            <div class="project-heading"><h3><button class="project-toggle" type="button" aria-expanded="true" aria-controls="cerver-details"><span class="disclosure no-print" aria-hidden="true">−</span><strong>Cerver</strong><span class="project-stack"> | C, JavaScript, Compiler</span></button></h3><a href="https://www.npmjs.com/package/@velox0/cerver" target="_blank" rel="noopener noreferrer">@velox0/Cerver</a></div>
+            <div id="cerver-details" class="project-details"><ul>
+              <li>Built a compile-time web framework transpiling restricted JS into optimized standalone C binaries with 0 node dependencies.</li>
+              <li>Implemented Next.js-style file-based routing generating native C code with epoll/kqueue for consistent sub-5ms response times.</li>
+              <li>Added automatic asset embedding &amp; minification, producing &lt;900KB single binaries with &lt;2ms startup time on M4 MacBook.</li>
+              <li>Integrated an npm-based CI/CD pipeline for automated builds, testing, and package publishing to the npm registry.</li>
+              <li>Achieved exceptional performance of 125k+ req/s with sub-10ms p99 latency under heavy load on MacBook Air M4.</li>
+            </ul><button class="project-activity text-button no-print" data-repo="velox0/cerver" type="button">Explore commits ↗</button></div>
+          </article>
+          <article class="project" data-repo="velox0/kraken" data-skills="Go,PostgreSQL,Redis,Docker,SPA,Bash,Distributed Systems,Microservices">
+            <div class="project-heading"><h3><button class="project-toggle" type="button" aria-expanded="true" aria-controls="kraken-details"><span class="disclosure no-print" aria-hidden="true">−</span><strong>Kraken</strong><span class="project-stack"> | Go, PostgreSQL, Redis, Docker, SPA</span></button></h3><a href="https://github.com/velox0/kraken" target="_blank" rel="noopener noreferrer">GitHub/Kraken</a></div>
+            <div id="kraken-details" class="project-details"><ul>
+              <li>Architected distributed uptime monitoring system maintaining 99.95% uptime with incident deduplication across endpoints.</li>
+              <li>Engineered automated remediation engine executing custom shell scripts with rate limiting on detected failures.</li>
+              <li>Implemented strict sandboxed script execution engine with environment abstraction and zero known attack surface.</li>
+              <li>Designed flexible architecture scaling seamlessly from single monolithic binary to Redis-backed microservices.</li>
+              <li>Built secure SPA dashboard with custom RBAC system and brute-force protection for reliable incident visibility.</li>
+            </ul><button class="project-activity text-button no-print" data-repo="velox0/kraken" type="button">Explore commits ↗</button></div>
+          </article>
+          <article class="project" data-repo="velox0/moonlight-server" data-skills="Go,Distributed Systems,WebSockets,AWS,Microservices">
+            <div class="project-heading"><h3><button class="project-toggle" type="button" aria-expanded="true" aria-controls="moonlight-details"><span class="disclosure no-print" aria-hidden="true">−</span><strong>Moonlight-Server</strong><span class="project-stack"> | Go, Distributed Systems</span></button></h3><a href="https://moonlight.velox0.com" target="_blank" rel="noopener noreferrer">moonlight.velox0.com</a></div>
+            <div id="moonlight-details" class="project-details"><ul>
+              <li>Developed lightweight high-concurrency WebSocket proxy handling 3,000+ simultaneous connections on small EC2 instances.</li>
+              <li>Implemented region-aware load balancing prioritizing nodes dynamically based on connection recency and latency metrics.</li>
+              <li>Configured robust access token security alongside comprehensive real-time observability and health metrics dashboard.</li>
+              <li>Designed hierarchical region fallback mechanism ensuring continuity by routing to global nodes during local outages.</li>
+              <li>Engineered deterministic task tracking with automatic WebSocket-to-HTTP protocol degradation for seamless reliability.</li>
+            </ul><button class="project-activity text-button no-print" data-repo="velox0/moonlight-server" type="button">Explore commits ↗</button></div>
+          </article>
+          <article class="project" data-repo="velox0/gatekeeper" data-skills="Go,Reverse Proxy,Authentication">
+            <div class="project-heading"><h3><button class="project-toggle" type="button" aria-expanded="true" aria-controls="gatekeeper-details"><span class="disclosure no-print" aria-hidden="true">−</span><strong>Gatekeeper</strong><span class="project-stack"> | Go, Reverse Proxy, Authentication</span></button></h3><a href="https://github.com/velox0/gatekeeper" target="_blank" rel="noopener noreferrer">GitHub/Gatekeeper</a></div>
+            <div id="gatekeeper-details" class="project-details"><ul>
+              <li>Developed lightweight virtual-host-aware reverse proxy with multi-port listeners handling 5k+ req/s on constrained hardware.</li>
+              <li>Implemented hierarchical configuration system with zero-downtime reloads and graceful shutdown for production stability.</li>
+              <li>Built customizable animated login plugins (aurora, matrix, hearts) with per-host theming and secure session management.</li>
+              <li>Designed bcrypt-based authentication with configurable TTL supporting consistent daily active user sessions.</li>
+              <li>Added interactive CLI tool along with comment-preserving config handling for streamlined enterprise deployment.</li>
+            </ul><button class="project-activity text-button no-print" data-repo="velox0/gatekeeper" type="button">Explore commits ↗</button></div>
+          </article>
+          <article class="project" data-repo="velox0/veloxzerror" data-skills="Fastify,Express,GitHub Actions,AWS,Terraform,JavaScript,REST APIs">
+            <div class="project-heading"><h3><button class="project-toggle" type="button" aria-expanded="true" aria-controls="portfolio-details"><span class="disclosure no-print" aria-hidden="true">−</span><strong>velox0.com</strong></button></h3><a href="https://velox0.com/">https://velox0.com/</a></div>
+            <div id="portfolio-details" class="project-details"><ul>
+              <li>Developed and deployed a personal portfolio platform showcasing systems, backend, projects with GitHub integration.</li>
+              <li>Migrated backend architecture from Express.js to Fastify, improving performance and request handling efficiency.</li>
+              <li>Provisioned and managed AWS EC2 infrastructure using Terraform, including IAM configuration and deployment automation.</li>
+              <li>Built automated CI/CD pipelines with GitHub Actions for testing, building, and deployment workflows across multiple projects.</li>
+              <li>Integrated live project, commit, and activity feeds from GitHub APIs to surface real-time development updates.</li>
+            </ul><button class="project-activity text-button no-print" data-repo="velox0/veloxzerror" type="button">Explore commits ↗</button></div>
+          </article>
+        </div>
+        <p class="empty-state" id="projects-empty" hidden>No listed projects match. Try another skill or clear the filters.</p>
+      </section>
+
+      <section id="achievements" aria-labelledby="achievements-heading">
+        <h2 id="achievements-heading">Achievements &amp; additional experience</h2>
+        <ul>
+          <li><strong>Smart India Hackathon (SIH) 2024 Finalist:</strong> Developed a geospatial AI pipeline utilizing SAR data for real-time human-induced change detection.</li>
+          <li><strong>Systems Management:</strong> Expertise in administrating complex Linux environments, including automated local-to-cloud synchronization via custom network tooling.</li>
+        </ul>
+      </section>
+
+      <section id="activity" class="activity no-print" aria-labelledby="activity-heading">
+        <div class="section-heading"><h2 id="activity-heading">Beyond the resume</h2><a class="section-note" href="https://github.com/velox0" target="_blank" rel="noopener noreferrer">@velox0 ↗</a></div>
+        <div class="activity-intro"><p>The work continues. Recent public commits, straight from GitHub.</p><button class="text-button" id="refresh-commits" type="button">Refresh ↻</button></div>
+        <div class="activity-summary" id="activity-summary" hidden>
+          <div class="activity-numbers"><span><strong id="stat-commits">0</strong> loaded commits</span><span><strong id="stat-repos">0</strong> repositories</span><span><strong id="stat-days">0</strong> active days</span></div>
+          <div class="activity-chart" id="activity-chart" role="group" aria-label="Daily activity in loaded commits over the last 8 weeks; select a day to filter"></div>
+          <div class="chart-caption"><span>Last 8 weeks · loaded commits only · UTC</span><span>Select a day to filter</span></div>
+        </div>
+        <div class="commit-controls">
+          <label class="search-field"><span class="sr-only">Search commits</span><span aria-hidden="true">⌕</span><input id="commit-search" type="search" placeholder="Search commits, repositories, or SHA…" /><kbd aria-hidden="true">/</kbd></label>
+          <div class="commit-selects">
+            <label>Repository <select id="commit-repo"><option value="">All repositories</option></select></label>
+            <label>Period <select id="commit-period"><option value="all">Any time</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select></label>
+            <label>Sort <select id="commit-sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="repo">Repository A–Z</option><option value="message">Message A–Z</option></select></label>
+          </div>
+        </div>
+        <div class="feed-meta"><span id="commit-count" role="status">Loading recent commits…</span><button id="clear-commits" class="text-button" type="button" hidden>Clear filters ×</button></div>
+        <p id="feed-status" class="feed-status" role="status" aria-live="polite">Connecting to GitHub…</p>
+        <div id="commit-list" aria-busy="true"></div>
+        <div class="feed-pagination"><button id="show-more" type="button" hidden>Show more commits ↓</button><button id="load-older" type="button" hidden>Load older from GitHub ↓</button></div>
+        <p class="feed-footnote">Public default-branch commits authored by @velox0. Search, sorting, and the chart apply to loaded commits. <a href="https://github.com/search?q=author%3Avelox0&amp;type=commits" target="_blank" rel="noopener noreferrer">Explore full history ↗</a></p>
+        <noscript><p>Enable JavaScript to load GitHub activity and use the interactive controls. The full resume is available above.</p></noscript>
+      </section>
+    </main>
+    <footer class="page-footer no-print"><a href="#top">Ayush Tiwari ↑</a><span>Built with intent. Still building.</span><a href="mailto:veloxzerror@gmail.com">Get in touch ↗</a></footer>
+    <div id="toast" class="toast no-print" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

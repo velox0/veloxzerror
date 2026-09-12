@@ -66,6 +66,11 @@ fastify.get("/art", (req, res) => {
   return res.sendFile("art.html");
 });
 
+// The resume is static; its GitHub feed is fetched directly by the browser.
+fastify.get("/resume", (req, res) => {
+  return res.sendFile("resume.html");
+});
+
 fastify.get("/art/:key", (req, res) => {
   const key = req.params.key.replace(/[^a-zA-Z0-9-]/g, "");
   const filePath = path.join(__dirname, "public", "art", `${key}.html`);
